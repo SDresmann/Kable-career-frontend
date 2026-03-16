@@ -1,0 +1,479 @@
+/* Section page – no navbar */
+.section-page {
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+.section-page .page-header {
+  padding: 1.25rem 2rem;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-page .header-auth-link {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #172649;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+.section-page .header-auth-link:hover {
+  text-decoration: underline;
+}
+
+.section-page .kable-logo {
+  display: inline-flex;
+  text-decoration: none;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #172649;
+  letter-spacing: -0.02em;
+}
+
+.section-main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin: 0 0 0.5rem 0;
+}
+
+.section-title-rule {
+  border: none;
+  border-top: 2px solid #172649;
+  margin: 0 0 1.5rem 0;
+}
+
+/* Shared block layout */
+.section-block {
+  display: grid;
+  margin-bottom: 0;
+  min-height: 0;
+}
+
+.block-heading {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 1rem 0;
+}
+
+.block-heading:not(.white) {
+  color: #fff;
+}
+
+.block-label {
+  font-size: 0.875rem;
+  color: #fff;
+  margin: 0 0 0.25rem 0;
+}
+
+.block-prompt {
+  color: #374151;
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+}
+
+/* Block 1: Objectives (dark grey) + Video */
+.block-objectives-video {
+  grid-template-columns: 1fr 1.4fr;
+  gap: 0;
+  margin-bottom: 0;
+}
+
+.block-objectives {
+  background: #172649;
+  padding: 1.5rem;
+  color: #ffffff;
+}
+
+.objectives-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.block-objectives .block-heading {
+  margin-top: 0;
+}
+
+.block-video {
+  background: #e8f5e9;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+}
+
+.video-player {
+  width: 100%;
+  max-width: 480px;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.video-thumbnail {
+  position: relative;
+  aspect-ratio: 16/9;
+  background: linear-gradient(135deg, #fcd5b0 0%, #f5b8c4 50%, #b8d4f0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-thumbnail .play-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.video-thumbnail .play-btn svg {
+  width: 28px;
+  height: 28px;
+  margin-left: 4px;
+}
+
+.video-time {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.video-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: #fff;
+}
+
+.video-controls .progress-bar {
+  flex: 1;
+  height: 6px;
+  background: #e8f5e9;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #6ecf81;
+  border-radius: 3px;
+}
+
+.controls-right button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* Block 2: Quiz (purple) + Audio (dark blue) */
+.block-quiz-audio {
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.block-quiz-panel {
+  background: #172649;
+  padding: 2rem;
+  text-align: center;
+}
+
+.block-quiz-panel .block-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1rem;
+}
+
+.block-quiz-panel .block-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 2;
+}
+
+.btn-quiz-inline {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.6rem 1.25rem;
+  background: #fff;
+  color: #172649;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 4px;
+  text-decoration: none;
+  border: none;
+}
+
+.btn-quiz-inline:hover {
+  background: #f3e8ff;
+  color: #6d28d9;
+}
+
+.block-quiz-coming {
+  margin: 1rem 0 0;
+  color: rgba(255,255,255,0.9);
+  font-size: 0.95rem;
+}
+
+.block-audio {
+  background: #172649;
+  padding: 2rem;
+  text-align: center;
+}
+
+.block-audio .block-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 0.75rem;
+}
+
+.block-audio .block-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.audio-player {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.play-btn-sm {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.audio-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 120px;
+  max-width: 280px;
+}
+
+.audio-progress .progress-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.audio-progress .time {
+  font-size: 0.8rem;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.audio-links {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.audio-links a {
+  color: #fff;
+  text-decoration: underline;
+  font-size: 0.9rem;
+}
+
+/* Block icon – outline white */
+.block-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.block-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  color: #fff;
+}
+
+/* Block 3: Videos sidebar (light blue) + list */
+.block-videos {
+  grid-template-columns: 180px 1fr;
+  gap: 0;
+}
+
+.block-videos-sidebar {
+  background: #0ea5e9;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.block-videos-sidebar .block-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 0.75rem;
+}
+
+.block-videos-content {
+  background: #fff;
+  padding: 1.5rem;
+}
+
+.video-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.btn-video {
+  padding: 0.75rem 1rem;
+  background: #0ea5e9;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+}
+
+.btn-video:hover {
+  background: #0284c7;
+}
+
+/* Block 4: Assignments sidebar (green) + list */
+.block-assignments {
+  grid-template-columns: 180px 1fr;
+  gap: 0;
+}
+
+.block-assignments-sidebar {
+  background: #6ecf81;
+  padding: 1.5rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.block-assignments-sidebar .block-icon {
+  width: 56px;
+  height: 56px;
+}
+
+.block-assignments-content {
+  background: #fff;
+  padding: 1.5rem;
+}
+
+.assignment-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.btn-assignment {
+  display: block;
+  padding: 0.75rem 1rem;
+  background: #e8f5e9;
+  color: #374151;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+}
+
+.btn-assignment:hover {
+  background: #d1d5db;
+}
+
+/* Logo K circle (reuse from App if needed) */
+.section-page .logo-k-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section-page .logo-k-circle {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #6ecf81;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.section-page .logo-k-letter {
+  position: relative;
+  z-index: 1;
+  color: #172649;
+}
+
+.section-page .logo-rest {
+  margin-left: 2px;
+  color: #172649;
+}
+
+@media (max-width: 700px) {
+  .block-objectives-video,
+  .block-quiz-audio,
+  .block-videos,
+  .block-assignments {
+    grid-template-columns: 1fr;
+  }
+
+  .video-buttons,
+  .assignment-buttons {
+    grid-template-columns: 1fr;
+  }
+}

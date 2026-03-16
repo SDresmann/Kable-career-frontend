@@ -1,0 +1,177 @@
+/* Life Skills page – no navbar */
+.life-skills-page {
+  min-height: 100vh;
+  background: #ffffff;
+  text-align: left;
+}
+
+.life-skills-page .page-header {
+  padding: 1.25rem 2rem;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-auth-link {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #172649;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+.header-auth-link:hover {
+  text-decoration: underline;
+}
+
+/* Kable Academy logo – blue text, stylized K with blue circle */
+.life-skills-page .kable-logo {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #172649;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.life-skills-page .logo-k-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.life-skills-page .logo-k-circle {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #172649;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.life-skills-page .logo-k-letter {
+  position: relative;
+  z-index: 1;
+  color: #172649;
+}
+
+.life-skills-page .logo-rest {
+  margin-left: 2px;
+  color: #172649;
+}
+
+/* Main content */
+.life-skills-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.life-skills-heading {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin: 0 0 0.5rem 0;
+}
+
+.life-skills-subheading {
+  font-size: 1rem;
+  color: #4b5563;
+  margin: 0 0 2rem 0;
+  line-height: 1.5;
+}
+
+.life-skills-empty {
+  color: #6b7280;
+  font-size: 1rem;
+  margin: 0 0 2rem 0;
+  line-height: 1.5;
+}
+
+.life-skills-no-access {
+  background: #e8f5e9;
+  border: 1px solid rgba(110, 207, 129, 0.4);
+  border-radius: 8px;
+  padding: 1.5rem 2rem;
+  max-width: 480px;
+}
+
+.life-skills-no-access p {
+  margin: 0 0 0.5rem 0;
+}
+
+.life-skills-no-access p:last-child {
+  margin-bottom: 0;
+}
+
+/* 3x4 grid of tiles */
+.life-skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.life-skill-tile {
+  aspect-ratio: 4 / 3;
+  min-height: 160px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+  background-color: #6b7280;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+/* Desaturated look for image tiles */
+.life-skill-tile.tile-with-image {
+  filter: saturate(0.85);
+}
+
+.life-skill-tile.tile-with-image:hover {
+  filter: saturate(1);
+}
+
+.life-skill-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+a.life-skill-tile {
+  text-decoration: none;
+}
+
+.tile-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  padding: 1rem;
+  line-height: 1.25;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
+  .life-skills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .life-skills-heading {
+    font-size: 1.5rem;
+  }
+}
