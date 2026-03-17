@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import mammoth from 'mammoth';
+import * as mammoth from 'mammoth';
 
 export function getFileType(filename) {
   const lower = (filename || '').toLowerCase();
