@@ -1,4 +1,6 @@
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_BASE =
+  process.env.REACT_APP_API_URL ||
+  (process.env.NODE_ENV === 'production' ? 'https://kable-career-backend.onrender.com' : 'http://localhost:5000');
 const AUTH_KEY = 'kable_user';
 
 function getStoredUser() {
@@ -59,7 +61,6 @@ export async function getMySubmissions(userEmail) {
 
 /** Submit checklist with file (e.g. Resume v1) – sends to backend, which can email recipient */
 export async function submitChecklistWithFile(file, assignmentName = 'Resume v1 Checklist', userEmail = '') {
-  const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
   const form = new FormData();
   form.append('file', file);
   form.append('assignmentName', assignmentName);
