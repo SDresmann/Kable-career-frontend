@@ -67,11 +67,17 @@ export async function register(email, password) {
   return data;
 }
 
+function getAdminBase() {
+  const url = process.env.REACT_APP_KABLE_ADMIN_API_URL || 'http://localhost:5001';
+  if (process.env.NODE_ENV === 'production' && (url === 'http://localhost:5001' || url.includes('localhost'))) return null;
+  return url;
+}
+
 /** Fetch current user's file submissions (to check if assignment already submitted) */
 export async function getMySubmissions(userEmail) {
-  const adminBase = process.env.REACT_APP_KABLE_ADMIN_API_URL || 'http://localhost:5001';
+  const adminBase = getAdminBase();
   const email = getLoggedInEmail(userEmail);
-  if (!email) return { success: true, data: [] };
+  if (!email || !adminBase) return { success: true, data: [] };
   const res = await fetch(`${adminBase}/api/submissions?userEmail=${encodeURIComponent(email)}`);
   const data = await res.json().catch(() => ({}));
   if (!res.ok) return { success: false, data: [] };
@@ -121,9 +127,9 @@ export async function submitAssignmentComment({ assignmentName, comment, userEma
 
 /** Fetch current user's quiz results from admin (to check if section quiz already completed) */
 export async function getMyQuizResults(userEmail) {
-  const adminBase = process.env.REACT_APP_KABLE_ADMIN_API_URL || 'http://localhost:5001';
+  const adminBase = getAdminBase();
   const email = getLoggedInEmail(userEmail);
-  if (!email) return { success: true, data: [] };
+  if (!email || !adminBase) return { success: true, data: [] };
   const res = await fetch(`${adminBase}/api/quiz-results?userEmail=${encodeURIComponent(email)}`);
   const data = await res.json().catch(() => ({}));
   if (!res.ok) return { success: false, data: [] };
@@ -132,10 +138,11 @@ export async function getMyQuizResults(userEmail) {
 
 /** Submit section quiz result so it appears in Kable Career Admin (optional: set REACT_APP_KABLE_ADMIN_API_URL) */
 export async function submitSectionQuizResult({ userEmail, sectionId, sectionTitle, score, total }) {
-  const adminBase = process.env.REACT_APP_KABLE_ADMIN_API_URL || 'http://localhost:5001';
+  const adminBase = getAdminBase();
   const email = getLoggedInEmail(userEmail);
-  if (!email) {
-    console.warn('Quiz result not sent: no logged-in email. Log in so your result is saved.');
+  if (!email || !adminBase) {
+    if (!adminBase && process.env.NODE_ENV === 'production') return { success: false };
+    if (!email) console.warn('Quiz result not sent: no logged-in email. Log in so your result is saved.');
     return { success: false };
   }
   const res = await fetch(`${adminBase}/api/quiz-results`, {
@@ -150,9 +157,9 @@ export async function submitSectionQuizResult({ userEmail, sectionId, sectionTit
 
 /** Fetch section IDs released for this student's cohort (admin API). Returns [] if no cohort or not assigned yet – then student sees all sections. */
 export async function getReleasedSections(userEmail) {
-  const adminBase = process.env.REACT_APP_KABLE_ADMIN_API_URL || 'http://localhost:5001';
+  const adminBase = getAdminBase();
   const email = getLoggedInEmail(userEmail);
-  if (!email) return { success: true, data: { sectionIds: [] } };
+  if (!email || !adminBase) return { success: true, data: { sectionIds: [] } };
   const res = await fetch(`${adminBase}/api/released-sections?userEmail=${encodeURIComponent(email)}`);
   const data = await res.json().catch(() => ({}));
   if (!res.ok) return { success: true, data: { sectionIds: [] } };
