@@ -26,25 +26,39 @@ function getLoggedInEmail(override) {
   return auth?.email || '';
 }
 
+async function fetchWithRetry(url, options, retries = 2) {
+  let lastRes = null;
+  let lastData = null;
+  for (let i = 0; i <= retries; i++) {
+    const res = await fetch(url, options);
+    const data = await res.json().catch(() => ({}));
+    if (res.ok) return data;
+    lastRes = res;
+    lastData = data;
+    if (res.status === 503 && i < retries) {
+      await new Promise((r) => setTimeout(r, 1500 * (i + 1)));
+      continue;
+    }
+    break;
+  }
+  throw new Error(lastData?.message || (lastRes?.status === 503 ? 'Service starting up. Please try again.' : 'Login failed'));
+}
+
 export async function login(email, password) {
-  const res = await fetch(`${API_BASE}/user/login`, {
+  const data = await fetchWithRetry(`${API_BASE}/user/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
   });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.message || 'Login failed');
   return data;
 }
 
 export async function register(email, password) {
-  const res = await fetch(`${API_BASE}/user/register`, {
+  const data = await fetchWithRetry(`${API_BASE}/user/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
   });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.message || 'Registration failed');
   return data;
 }
 
