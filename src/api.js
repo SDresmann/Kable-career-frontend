@@ -26,7 +26,7 @@ function getLoggedInEmail(override) {
   return auth?.email || '';
 }
 
-async function fetchWithRetry(url, options, retries = 2) {
+async function fetchWithRetry(url, options, retries = 4) {
   let lastRes = null;
   let lastData = null;
   for (let i = 0; i <= retries; i++) {
@@ -36,12 +36,17 @@ async function fetchWithRetry(url, options, retries = 2) {
     lastRes = res;
     lastData = data;
     if (res.status === 503 && i < retries) {
-      await new Promise((r) => setTimeout(r, 1500 * (i + 1)));
+      await new Promise((r) => setTimeout(r, 2000 * (i + 1)));
       continue;
     }
     break;
   }
-  throw new Error(lastData?.message || (lastRes?.status === 503 ? 'Service starting up. Please try again.' : 'Login failed'));
+  const msg = lastRes?.status === 503
+    ? 'Service is starting up. Please wait a moment and try again.'
+    : lastRes?.status === 404
+      ? 'Login service not found. Please check back later or contact support.'
+      : lastData?.message || 'Login failed';
+  throw new Error(msg);
 }
 
 export async function login(email, password) {
