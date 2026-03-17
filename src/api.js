@@ -68,8 +68,9 @@ export async function register(email, password) {
 }
 
 function getAdminBase() {
-  const url = process.env.REACT_APP_KABLE_ADMIN_API_URL || 'http://localhost:5001';
-  if (process.env.NODE_ENV === 'production' && (url === 'http://localhost:5001' || url.includes('localhost'))) return null;
+  const url =
+    process.env.REACT_APP_KABLE_ADMIN_API_URL ||
+    (process.env.NODE_ENV === 'production' ? 'https://kable-career-adimn.onrender.com' : 'http://localhost:5001');
   return url;
 }
 
