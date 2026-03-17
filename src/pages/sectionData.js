@@ -111,6 +111,106 @@ const SECTION_12_REST = [
 ];
 export const PLACEHOLDER_ASSIGNMENT_OPTIONS = ['Assignment 1', 'Assignment 2', 'Assignment 3', 'Assignment 4'];
 
+/** Main video filename per section (in public/WeekN/video/). Empty for weeks with no video. */
+export const SECTION_VIDEO = {
+  1: 'The Modern Hiring Process.mp4',
+  2: 'Building_a_Winning_Resume.mp4',
+  3: 'Being_Findable_Online.mp4',
+  4: 'Build_Your_Job_Search_OS.mp4',
+  5: 'Cracking_the_Code.mp4',
+  6: 'Your_Career_Toolkit.mp4',
+  7: 'Ace_Your_Tech_Interview.mp4',
+  8: null,
+  9: null,
+  10: 'The_Unwritten_Rules.mp4',
+  11: 'Job_Search_Resilience.mp4',
+  12: 'A_Practical_Philosophy_of_Money.mp4',
+};
+
+/** Display label for the main video (used in "Choose a video" list). */
+export const SECTION_VIDEO_LABEL = {
+  1: 'The Modern Hiring Process',
+  2: 'Building a Winning Resume',
+  3: 'Being Findable Online',
+  4: 'Build Your Job Search OS',
+  5: 'Cracking the Code',
+  6: 'Your Career Toolkit',
+  7: 'Ace Your Tech Interview',
+  10: 'The Unwritten Rules',
+  11: 'Job Search Resilience',
+  12: 'A Practical Philosophy of Money',
+};
+
+/** Audio filename per section (in public/WeekN/audio/). Empty for weeks with no audio. */
+export const SECTION_AUDIO = {
+  1: 'Audio Lecture.m4a',
+  2: 'Engineer_Your_Resume_for_Robots_and_Recruiters.m4a',
+  3: 'Stop_Job_Hunting_and_Get_Hunted.m4a',
+  4: 'The_Post-Bootcamp_Job_Search_Operating_System.m4a',
+  5: 'Beat_the_ATS_and_land_tech_interviews.m4a',
+  6: 'Why_Brilliant_Tech_Workers_Get_Fired.m4a',
+  7: 'Behavioral_interview_tactics_for_cybersecurity_career_changers.m4a',
+  8: null,
+  9: null,
+  10: 'What_managers_actually_want_from_you.m4a',
+  11: 'Beating_the_2026_AI_hiring_trap.m4a',
+  12: 'Don_t_go_broke_with_your_first_paycheck.m4a',
+};
+
+/** Assignment materials (docx, pptx, png) for download per section. { label, file } in public/WeekN/assignments/. */
+export const SECTION_ASSIGNMENT_FILES = {
+  1: [
+    { label: 'Week One Newsletter and Blog Post', file: 'Week One Newsletter and Blog Post.docx' },
+    { label: 'Week One – Modern Hiring Systems (Presentation)', file: 'Week One- Modern Hiring Systems, Recruiter Behavior & Candidate Strategy.pptx' },
+    { label: 'Presentation', file: 'Presentation.pptx' },
+    { label: 'Week 1 Infographic', file: 'Week 1 - Infographic.png' },
+  ],
+  2: [
+    { label: 'Week 2 Presentation', file: 'Week 2 Presentation.pptx' },
+  ],
+  3: [
+    { label: 'Week 3 Presentation', file: 'Week 3 Presentation.pptx' },
+  ],
+  4: [
+    { label: 'Week 4 Job Search OS (Presentation)', file: 'Week4_Job_Search_OS.pptx' },
+  ],
+  5: [
+    { label: 'Resume Tailoring & AI Alignment (Presentation)', file: 'Week5_Resume_Tailoring_AI_Alignment.pptx' },
+    { label: 'Email Newsletter', file: 'email_newsletter.docx' },
+    { label: 'LinkedIn Article', file: 'linkedin_article.docx' },
+    { label: 'Resume Checklist', file: 'resume_checklist (1).docx' },
+  ],
+  6: [
+    { label: 'Communication Workshop (Presentation)', file: 'Week6_Communication_Workshop.pptx' },
+    { label: 'Email Newsletter – Comms', file: 'email_newsletter_comms.docx' },
+    { label: 'LinkedIn Soft Skills', file: 'linkedin_soft_skills.docx' },
+    { label: 'Professionalism Playbook', file: 'professionalism_playbook.docx' },
+    { label: 'Infographic', file: 'unnamed (2).png' },
+  ],
+  7: [
+    { label: 'Interview Workshop (Presentation)', file: 'week7_interview_workshop (1).pptx' },
+    { label: 'Interview Newsletter', file: 'interview_newsletter.docx' },
+    { label: 'LinkedIn Interview Article', file: 'linkedin_interview_article.docx' },
+    { label: 'LinkedIn Interview Article (alt)', file: 'linkedin_interview_article (1).docx' },
+  ],
+  8: [
+    { label: 'Week 8 Hiring System (Presentation)', file: 'Week8_HiringSystem.pptx' },
+    { label: 'Hiring Newsletter', file: 'hiring_newsletter.docx' },
+    { label: 'Hiring System Guide', file: 'hiring_system_guide.docx' },
+    { label: 'LinkedIn Hiring Article', file: 'linkedin_hiring_article.docx' },
+  ],
+  9: [],
+  10: [
+    { label: 'Week 10 Presentation', file: 'Week 10.pptx' },
+  ],
+  11: [
+    { label: 'Week 11 Presentation', file: 'Week 11.pptx' },
+  ],
+  12: [
+    { label: 'Financial Stability Workshop (Presentation)', file: 'Financial_Stability_Workshop (1).pptx' },
+  ],
+};
+
 /** Returns full assignment list for a section (Read chapter N first, then section-specific or placeholders) */
 export function getAssignmentOptions(sectionId) {
   const id = parseInt(sectionId, 10) || 1;

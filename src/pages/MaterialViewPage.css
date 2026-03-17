@@ -1,0 +1,108 @@
+.material-view-page {
+  min-height: 100vh;
+  background: #f9fafb;
+}
+
+.material-view-header {
+  padding: 1.25rem 2rem;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.material-view-header .kable-logo {
+  display: inline-flex;
+  text-decoration: none;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #172649;
+  letter-spacing: -0.02em;
+}
+
+.material-view-header .logo-k-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.material-view-header .logo-k-letter {
+  position: relative;
+  z-index: 1;
+  color: #172649;
+}
+
+.material-view-header .logo-rest {
+  margin-left: 2px;
+  color: #172649;
+}
+
+.material-view-header .header-auth-link {
+  margin-left: auto;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #172649;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+.material-view-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.material-view-breadcrumb {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin: 0 0 1rem 0;
+}
+
+.material-view-breadcrumb a {
+  color: #172649;
+  text-decoration: none;
+}
+
+.material-view-breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.material-view-breadcrumb .current {
+  color: #374151;
+  font-weight: 500;
+}
+
+.material-view-error {
+  color: #b91c1c;
+  margin: 1rem 0;
+}
+
+.material-view-actions {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.material-view-actions .btn-outline {
+  display: inline-block;
+  padding: 0.6rem 1.25rem;
+  background: transparent;
+  color: #172649;
+  border: 1px solid #172649;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.material-view-actions .btn-outline:hover {
+  background: #172649;
+  color: #fff;
+}

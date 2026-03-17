@@ -132,6 +132,25 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
+.section-main-video {
+  width: 100%;
+  display: block;
+  max-height: 360px;
+}
+
+.video-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+}
+
+.video-placeholder-text {
+  margin: 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
 .video-thumbnail {
   position: relative;
   aspect-ratio: 16/9;
@@ -266,6 +285,17 @@
   height: 100%;
 }
 
+.section-audio-element {
+  width: 100%;
+  max-width: 100%;
+}
+
+.audio-placeholder-text {
+  margin: 0;
+  color: rgba(255,255,255,0.85);
+  font-size: 0.9rem;
+}
+
 .audio-player {
   display: flex;
   align-items: center;
@@ -370,6 +400,7 @@
 }
 
 .btn-video {
+  display: inline-block;
   padding: 0.75rem 1rem;
   background: #0ea5e9;
   color: #fff;
@@ -379,10 +410,12 @@
   font-weight: 500;
   cursor: pointer;
   text-align: left;
+  text-decoration: none;
 }
 
 .btn-video:hover {
   background: #0284c7;
+  color: #fff;
 }
 
 /* Block 4: Assignments sidebar (green) + list */
@@ -396,13 +429,23 @@
   padding: 1.5rem;
   text-align: center;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  color: #fff;
 }
 
 .block-assignments-sidebar .block-icon {
   width: 56px;
   height: 56px;
+  margin: 0 auto 0.75rem;
+}
+
+.block-assignments-sidebar .block-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  color: #fff;
 }
 
 .block-assignments-content {
@@ -432,6 +475,26 @@
 
 .btn-assignment:hover {
   background: #d1d5db;
+}
+
+.btn-assignment-download {
+  background: #f0f9ff;
+  border: 1px solid #0ea5e9;
+  color: #0369a1;
+}
+
+.btn-assignment-download:hover {
+  background: #e0f2fe;
+}
+
+.btn-assignment-materials {
+  background: #f0f9ff;
+  border: 1px solid #0ea5e9;
+  color: #0369a1;
+}
+
+.btn-assignment-materials:hover {
+  background: #e0f2fe;
 }
 
 /* Logo K circle (reuse from App if needed) */

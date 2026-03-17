@@ -4,6 +4,8 @@ import LifeSkillsPage from './pages/LifeSkills';
 import SectionPage from './pages/SectionPage';
 import AssignmentPage from './pages/AssignmentPage';
 import QuizPage from './pages/QuizPage';
+import MaterialsPage from './pages/MaterialsPage';
+import MaterialViewPage from './pages/MaterialViewPage';
 
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -42,6 +44,22 @@ function App() {
         element={
           <ProtectedRoute>
             <QuizPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/section/:sectionId/materials"
+        element={
+          <ProtectedRoute>
+            <MaterialsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/section/:sectionId/material/:materialIndex"
+        element={
+          <ProtectedRoute>
+            <MaterialViewPage />
           </ProtectedRoute>
         }
       />

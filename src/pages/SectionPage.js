@@ -1,6 +1,14 @@
 import { Link, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { WORKSHOP_TITLES, WORKSHOP_FOCUS, getAssignmentOptions } from './sectionData';
+import {
+  WORKSHOP_TITLES,
+  WORKSHOP_FOCUS,
+  getAssignmentOptions,
+  SECTION_VIDEO,
+  SECTION_VIDEO_LABEL,
+  SECTION_AUDIO,
+  SECTION_ASSIGNMENT_FILES,
+} from './sectionData';
 import './SectionPage.css';
 
 function KableLogo() {
@@ -14,17 +22,6 @@ function KableLogo() {
   );
 }
 
-const SECTION_1_VIDEO_OPTIONS = [
-  'Know Your Strengths',
-  'Know Your Brand',
-  'Checking Your Career Thermostat',
-  'Let Belief Be Your Edge',
-  'Birds of a Feather Flock Together',
-  'Overcoming Fear of Failure',
-];
-
-const PLACEHOLDER_VIDEO_OPTIONS = ['Video 1', 'Video 2', 'Video 3', 'Video 4', 'Video 5', 'Video 6'];
-
 export default function SectionPage() {
   const { sectionId } = useParams();
   const id = sectionId ? parseInt(sectionId, 10) : 1;
@@ -32,7 +29,10 @@ export default function SectionPage() {
   const isSection1 = id === 1;
 
   const focusPoints = WORKSHOP_FOCUS[id - 1] || [];
-  const videoOptions = isSection1 ? SECTION_1_VIDEO_OPTIONS : PLACEHOLDER_VIDEO_OPTIONS;
+  const videoFilename = SECTION_VIDEO[id];
+  const videoLabel = SECTION_VIDEO_LABEL[id];
+  const audioFilename = SECTION_AUDIO[id];
+  const assignmentFiles = SECTION_ASSIGNMENT_FILES[id] || [];
   const assignmentOptions = getAssignmentOptions(id);
 
   const { user, logout } = useAuth();
@@ -63,20 +63,23 @@ export default function SectionPage() {
             </ol>
           </div>
           <div className="block-video">
-            <div className="video-player">
-              <div className="video-thumbnail">
-                <button type="button" className="play-btn" aria-label="Play video">
-                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                </button>
-                <span className="video-time">00:57</span>
+            {videoFilename ? (
+              <div className="video-player">
+                <video
+                  src={`/Week${id}/video/${encodeURIComponent(videoFilename)}`}
+                  controls
+                  preload="metadata"
+                  className="section-main-video"
+                  aria-label={videoLabel || 'Week video'}
+                >
+                  Your browser does not support the video tag.
+                </video>
               </div>
-              <div className="video-controls">
-                <div className="progress-bar"><div className="progress-fill" style={{ width: '20%' }} /></div>
-                <div className="controls-right">
-                  <button type="button" aria-label="Volume">🔊</button>
-                </div>
+            ) : (
+              <div className="video-player video-placeholder">
+                <p className="video-placeholder-text">No video for this week.</p>
               </div>
-            </div>
+            )}
           </div>
         </section>
 
@@ -98,52 +101,70 @@ export default function SectionPage() {
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
             </div>
             <h2 className="block-heading white">Audio Lesson</h2>
-            <div className="audio-player">
-              <button type="button" className="play-btn-sm" aria-label="Play">▶</button>
-              <div className="audio-progress">
-                <div className="progress-bar"><div className="progress-fill" style={{ width: '0%' }} /></div>
-                <span className="time">00:00</span>
-                <span className="time">26:17</span>
-              </div>
-              <button type="button" aria-label="Volume">🔊</button>
-            </div>
-            <div className="audio-links">
-              <a href="#download">Download MP3</a>
-              <a href="#text">MP3 Text</a>
-            </div>
+            {audioFilename ? (
+              <>
+                <div className="audio-player">
+                  <audio
+                    src={`/Week${id}/audio/${encodeURIComponent(audioFilename)}`}
+                    controls
+                    preload="metadata"
+                    className="section-audio-element"
+                    aria-label="Audio lesson"
+                  >
+                    Your browser does not support the audio element.
+                  </audio>
+                </div>
+                <div className="audio-links">
+                  <a href={`/Week${id}/audio/${encodeURIComponent(audioFilename)}`} download>Download audio</a>
+                </div>
+              </>
+            ) : (
+              <p className="audio-placeholder-text">No audio for this week.</p>
+            )}
           </div>
         </section>
 
         {/* Block 3: Videos list */}
-        <section className="section-block block-videos">
-          <div className="block-videos-sidebar">
-            <div className="block-icon videos-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/></svg>
+        {videoFilename && (
+          <section className="section-block block-videos">
+            <div className="block-videos-sidebar">
+              <div className="block-icon videos-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/></svg>
+              </div>
+              <h2 className="block-heading white">Videos</h2>
             </div>
-            <h2 className="block-heading white">Videos</h2>
-          </div>
-          <div className="block-videos-content">
-            <p className="block-prompt">Choose a video you would like to watch:</p>
-            <div className="video-buttons">
-              {videoOptions.map((videoTitle, i) => (
-                <button key={i} type="button" className="btn-video">{videoTitle}</button>
-              ))}
+            <div className="block-videos-content">
+              <p className="block-prompt">Watch this week&apos;s video:</p>
+              <div className="video-buttons">
+                <a
+                  href={`/Week${id}/video/${encodeURIComponent(videoFilename)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-video"
+                >
+                  {videoLabel || videoFilename}
+                </a>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
-        {/* Block 4: Assignments list */}
+        {/* Block 4: Assignments (one section: online assignments + course materials) */}
         <section className="section-block block-assignments">
           <div className="block-assignments-sidebar">
             <div className="block-icon assignments-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
             </div>
+            <h2 className="block-heading white">Assignments</h2>
           </div>
           <div className="block-assignments-content">
-            <p className="block-prompt">Choose an assignment you would like to complete online:</p>
+            <p className="block-prompt">Assignments and course materials:</p>
             <div className="assignment-buttons">
               {assignmentOptions.map((assignmentTitle, i) => (
-                <Link key={i} to={`/section/${id}/assignment/${i}`} className="btn-assignment">{assignmentTitle}</Link>
+                <Link key={`opt-${i}`} to={`/section/${id}/assignment/${i}`} className="btn-assignment">{assignmentTitle}</Link>
+              ))}
+              {assignmentFiles.map((item, i) => (
+                <Link key={`mat-${i}`} to={`/section/${id}/material/${i}`} className="btn-assignment">{item.label}</Link>
               ))}
             </div>
           </div>
