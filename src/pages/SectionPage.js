@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
@@ -10,6 +11,8 @@ import {
   SECTION_ASSIGNMENT_FILES,
 } from './sectionData';
 import './SectionPage.css';
+
+const PUBLIC = process.env.PUBLIC_URL || '';
 
 function KableLogo() {
   return (
@@ -34,6 +37,11 @@ export default function SectionPage() {
   const audioFilename = SECTION_AUDIO[id];
   const assignmentFiles = SECTION_ASSIGNMENT_FILES[id] || [];
   const assignmentOptions = getAssignmentOptions(id);
+  const [videoError, setVideoError] = useState(false);
+  const [audioError, setAudioError] = useState(false);
+
+  const videoSrc = videoFilename ? `${PUBLIC}/Week${id}/video/${encodeURIComponent(videoFilename)}` : null;
+  const audioSrc = audioFilename ? `${PUBLIC}/Week${id}/audio/${encodeURIComponent(audioFilename)}` : null;
 
   const { user, logout } = useAuth();
 
@@ -65,15 +73,24 @@ export default function SectionPage() {
           <div className="block-video">
             {videoFilename ? (
               <div className="video-player">
-                <video
-                  src={`/Week${id}/video/${encodeURIComponent(videoFilename)}`}
-                  controls
-                  preload="metadata"
-                  className="section-main-video"
-                  aria-label={videoLabel || 'Week video'}
-                >
-                  Your browser does not support the video tag.
-                </video>
+                {!videoError ? (
+                  <video
+                    src={videoSrc}
+                    controls
+                    preload="metadata"
+                    className="section-main-video"
+                    aria-label={videoLabel || 'Week video'}
+                    onError={() => setVideoError(true)}
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                ) : null}
+                {videoError ? (
+                  <div className="video-placeholder">
+                    <p className="video-placeholder-text">Video couldn&apos;t load in the player.</p>
+                    <a href={videoSrc} target="_blank" rel="noopener noreferrer" className="btn-video">Open video in new tab</a>
+                  </div>
+                ) : null}
               </div>
             ) : (
               <div className="video-player video-placeholder">
@@ -103,20 +120,31 @@ export default function SectionPage() {
             <h2 className="block-heading white">Audio Lesson</h2>
             {audioFilename ? (
               <>
-                <div className="audio-player">
-                  <audio
-                    src={`/Week${id}/audio/${encodeURIComponent(audioFilename)}`}
-                    controls
-                    preload="metadata"
-                    className="section-audio-element"
-                    aria-label="Audio lesson"
-                  >
-                    Your browser does not support the audio element.
-                  </audio>
-                </div>
-                <div className="audio-links">
-                  <a href={`/Week${id}/audio/${encodeURIComponent(audioFilename)}`} download>Download audio</a>
-                </div>
+                {!audioError ? (
+                  <div className="audio-player">
+                    <audio
+                      src={audioSrc}
+                      controls
+                      preload="metadata"
+                      className="section-audio-element"
+                      aria-label="Audio lesson"
+                      onError={() => setAudioError(true)}
+                    >
+                      Your browser does not support the audio element.
+                    </audio>
+                  </div>
+                ) : (
+                  <div className="audio-fallback">
+                    <p className="audio-placeholder-text">Audio couldn&apos;t load in the player.</p>
+                    <a href={audioSrc} target="_blank" rel="noopener noreferrer" className="audio-links">Open audio in new tab</a>
+                    <a href={audioSrc} download className="audio-links">Download audio</a>
+                  </div>
+                )}
+                {!audioError && (
+                  <div className="audio-links">
+                    <a href={audioSrc} download>Download audio</a>
+                  </div>
+                )}
               </>
             ) : (
               <p className="audio-placeholder-text">No audio for this week.</p>
@@ -137,7 +165,7 @@ export default function SectionPage() {
               <p className="block-prompt">Watch this week&apos;s video:</p>
               <div className="video-buttons">
                 <a
-                  href={`/Week${id}/video/${encodeURIComponent(videoFilename)}`}
+                  href={videoSrc}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-video"
