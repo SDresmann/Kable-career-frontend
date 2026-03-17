@@ -1,6 +1,3 @@
-import { useState, useEffect } from 'react';
-import * as mammoth from 'mammoth';
-
 export function getFileType(filename) {
   const lower = (filename || '').toLowerCase();
   if (/\.(png|jpe?g|gif|webp|svg)$/.test(lower)) return 'image';
@@ -10,43 +7,17 @@ export function getFileType(filename) {
 }
 
 export function DocxViewer({ url, label }) {
-  const [html, setHtml] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    setError(null);
-    fetch(url)
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed to load document');
-        return res.arrayBuffer();
-      })
-      .then((arrayBuffer) => mammoth.convertToHtml({ arrayBuffer }))
-      .then((result) => {
-        if (!cancelled) setHtml(result.value);
-      })
-      .catch((err) => {
-        if (!cancelled) setError(err.message || 'Could not display document.');
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => { cancelled = true; };
-  }, [url]);
-
   return (
     <section className="materials-viewer-block">
       <h3 className="materials-viewer-title">{label}</h3>
-      {loading && <p className="materials-viewer-loading">Loading…</p>}
-      {error && <p className="materials-viewer-error">{error}</p>}
-      {!loading && !error && html && (
-        <div
-          className="materials-docx-body"
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
-      )}
+      <div className="materials-docx-open">
+        <p className="materials-docx-open-message">
+          Open the document in a new tab to view or download.
+        </p>
+        <a href={url} target="_blank" rel="noopener noreferrer" className="materials-docx-open-link">
+          Open document
+        </a>
+      </div>
     </section>
   );
 }
