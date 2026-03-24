@@ -153,7 +153,7 @@ export async function submitSectionQuizResult({ userEmail, sectionId, sectionTit
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.message || 'Failed to save quiz result');
-  return data;
+  return data; // includes stageUpdated: true when passed and moved to acceptance stage
 }
 
 /** Fetch section IDs released for this student's cohort (admin API). Returns [] if no cohort or not assigned yet – then student sees all sections. */
@@ -169,3 +169,15 @@ export async function getReleasedSections(userEmail) {
 
 /** Use for future authenticated API calls: fetch(url, { headers: getAuthHeaders() }) */
 export { getAuthHeaders };
+
+/** URL for week video/audio served by the backend (works on deploy when static host rewrites /* to index.html) */
+export function getMediaUrl(weekId, type, filename) {
+  const base = process.env.REACT_APP_API_URL ||
+    (process.env.NODE_ENV === 'production' ? 'https://kable-career-backend.onrender.com' : 'http://localhost:5000');
+  return `${base}/api/media/week/${weekId}/${type}/${encodeURIComponent(filename)}`;
+}
+
+/** Direct static path from frontend public/WeekN/{video|audio}/... (works on Render static site if files are deployed). */
+export function getStaticMediaUrl(weekId, type, filename) {
+  return `/Week${weekId}/${type}/${encodeURIComponent(filename)}`;
+}

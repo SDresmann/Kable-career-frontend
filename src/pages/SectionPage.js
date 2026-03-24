@@ -10,9 +10,8 @@ import {
   SECTION_AUDIO,
   SECTION_ASSIGNMENT_FILES,
 } from './sectionData';
+import { getMediaUrl, getStaticMediaUrl } from '../api';
 import './SectionPage.css';
-
-const PUBLIC = process.env.PUBLIC_URL || '';
 
 function KableLogo() {
   return (
@@ -39,9 +38,15 @@ export default function SectionPage() {
   const assignmentOptions = getAssignmentOptions(id);
   const [videoError, setVideoError] = useState(false);
   const [audioError, setAudioError] = useState(false);
+  const [videoUseStaticFallback, setVideoUseStaticFallback] = useState(false);
+  const [audioUseStaticFallback, setAudioUseStaticFallback] = useState(false);
 
-  const videoSrc = videoFilename ? `${PUBLIC}/Week${id}/video/${encodeURIComponent(videoFilename)}` : null;
-  const audioSrc = audioFilename ? `${PUBLIC}/Week${id}/audio/${encodeURIComponent(audioFilename)}` : null;
+  const videoSrc = videoFilename
+    ? (videoUseStaticFallback ? getStaticMediaUrl(id, 'video', videoFilename) : getMediaUrl(id, 'video', videoFilename))
+    : null;
+  const audioSrc = audioFilename
+    ? (audioUseStaticFallback ? getStaticMediaUrl(id, 'audio', audioFilename) : getMediaUrl(id, 'audio', audioFilename))
+    : null;
 
   const { user, logout } = useAuth();
 
@@ -80,7 +85,13 @@ export default function SectionPage() {
                     preload="metadata"
                     className="section-main-video"
                     aria-label={videoLabel || 'Week video'}
-                    onError={() => setVideoError(true)}
+                    onError={() => {
+                      if (!videoUseStaticFallback) {
+                        setVideoUseStaticFallback(true);
+                      } else {
+                        setVideoError(true);
+                      }
+                    }}
                   >
                     Your browser does not support the video tag.
                   </video>
@@ -128,7 +139,13 @@ export default function SectionPage() {
                       preload="metadata"
                       className="section-audio-element"
                       aria-label="Audio lesson"
-                      onError={() => setAudioError(true)}
+                      onError={() => {
+                        if (!audioUseStaticFallback) {
+                          setAudioUseStaticFallback(true);
+                        } else {
+                          setAudioError(true);
+                        }
+                      }}
                     >
                       Your browser does not support the audio element.
                     </audio>

@@ -34,6 +34,7 @@ export default function QuizPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState(() => questions.map(() => null));
   const [submitted, setSubmitted] = useState(false);
+  const [stageUpdatedToAcceptance, setStageUpdatedToAcceptance] = useState(false);
   const [alreadyCompleted, setAlreadyCompleted] = useState(false);
   const [previousResult, setPreviousResult] = useState(null);
   const [checkLoading, setCheckLoading] = useState(!!user?.email);
@@ -72,13 +73,14 @@ export default function QuizPage() {
       const total = questions.length;
       if (total > 0) {
         try {
-          await submitSectionQuizResult({
+          const result = await submitSectionQuizResult({
             userEmail: user?.email || '',
             sectionId: String(sectionNum),
             sectionTitle,
             score,
             total,
           });
+          if (result && result.stageUpdated) setStageUpdatedToAcceptance(true);
         } catch (err) {
           console.warn('Could not save quiz result to admin:', err);
         }
@@ -162,6 +164,9 @@ export default function QuizPage() {
               <p className="quiz-grade">
                 Grade: {Math.round((score / total) * 100)}% ({percentToLetterGrade((score / total) * 100)})
               </p>
+            )}
+            {stageUpdatedToAcceptance && (
+              <p className="quiz-acceptance-message">You passed! You&apos;ve been moved to the acceptance stage.</p>
             )}
             <Link to={`/section/${sectionId}`} className="btn-outline">Back to Section {sectionId}</Link>
           </div>
