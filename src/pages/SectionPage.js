@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import week1Video from '../video/The Modern Hiring Process.mp4';
+import week1Audio from '../audio/Audio Lecture.m4a';
 import {
   WORKSHOP_TITLES,
   WORKSHOP_FOCUS,
@@ -42,6 +43,7 @@ export default function SectionPage() {
   const [videoUseStaticFallback, setVideoUseStaticFallback] = useState(false);
   const [week1VideoUseRemote, setWeek1VideoUseRemote] = useState(false);
   const [audioUseStaticFallback, setAudioUseStaticFallback] = useState(false);
+  const [week1AudioUseRemote, setWeek1AudioUseRemote] = useState(false);
 
   useEffect(() => {
     setVideoError(false);
@@ -49,6 +51,7 @@ export default function SectionPage() {
     setWeek1VideoUseRemote(false);
     setAudioError(false);
     setAudioUseStaticFallback(false);
+    setWeek1AudioUseRemote(false);
   }, [id]);
 
   const videoSrc = videoFilename
@@ -59,7 +62,11 @@ export default function SectionPage() {
         : getMediaUrl(id, 'video', videoFilename)
     : null;
   const audioSrc = audioFilename
-    ? (audioUseStaticFallback ? getStaticMediaUrl(id, 'audio', audioFilename) : getMediaUrl(id, 'audio', audioFilename))
+    ? id === 1 && !week1AudioUseRemote
+      ? week1Audio
+      : audioUseStaticFallback
+        ? getStaticMediaUrl(id, 'audio', audioFilename)
+        : getMediaUrl(id, 'audio', audioFilename)
     : null;
 
   const { user, logout } = useAuth();
@@ -156,7 +163,9 @@ export default function SectionPage() {
                       className="section-audio-element"
                       aria-label="Audio lesson"
                       onError={() => {
-                        if (!audioUseStaticFallback) {
+                        if (id === 1 && !week1AudioUseRemote) {
+                          setWeek1AudioUseRemote(true);
+                        } else if (!audioUseStaticFallback) {
                           setAudioUseStaticFallback(true);
                         } else {
                           setAudioError(true);
