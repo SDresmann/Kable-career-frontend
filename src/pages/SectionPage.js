@@ -2,7 +2,25 @@ import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import week1Video from '../video/The Modern Hiring Process.mp4';
+import week2Video from '../video/Building_a_Winning_Resume.mp4';
+import week3Video from '../video/Being_Findable_Online.mp4';
+import week4Video from '../video/Build_Your_Job_Search_OS.mp4';
+import week5Video from '../video/Cracking_the_Code.mp4';
+import week6Video from '../video/Your_Career_Toolkit.mp4';
+import week7Video from '../video/Ace_Your_Tech_Interview.mp4';
+import week10Video from '../video/The_Unwritten_Rules.mp4';
+import week11Video from '../video/Job_Search_Resilience.mp4';
+import week12Video from '../video/A_Practical_Philosophy_of_Money.mp4';
 import week1Audio from '../audio/Audio Lecture.m4a';
+import week2Audio from '../audio/Engineer_Your_Resume_for_Robots_and_Recruiters.m4a';
+import week3Audio from '../audio/Stop_Job_Hunting_and_Get_Hunted.m4a';
+import week4Audio from '../audio/The_Post-Bootcamp_Job_Search_Operating_System.m4a';
+import week5Audio from '../audio/Beat_the_ATS_and_land_tech_interviews.m4a';
+import week6Audio from '../audio/Why_Brilliant_Tech_Workers_Get_Fired.m4a';
+import week7Audio from '../audio/Behavioral_interview_tactics_for_cybersecurity_career_changers.m4a';
+import week10Audio from '../audio/What_managers_actually_want_from_you.m4a';
+import week11Audio from '../audio/Beating_the_2026_AI_hiring_trap.m4a';
+import week12Audio from '../audio/Don_t_go_broke_with_your_first_paycheck.m4a';
 import {
   WORKSHOP_TITLES,
   WORKSHOP_FOCUS,
@@ -14,6 +32,34 @@ import {
 } from './sectionData';
 import { getMediaUrl, getStaticMediaUrl } from '../api';
 import './SectionPage.css';
+
+/** Bundled in the app (src/video); keys are section ids. */
+const SECTION_BUNDLED_VIDEOS = {
+  1: week1Video,
+  2: week2Video,
+  3: week3Video,
+  4: week4Video,
+  5: week5Video,
+  6: week6Video,
+  7: week7Video,
+  10: week10Video,
+  11: week11Video,
+  12: week12Video,
+};
+
+/** Bundled in the app (src/audio); keys are section ids. */
+const SECTION_BUNDLED_AUDIOS = {
+  1: week1Audio,
+  2: week2Audio,
+  3: week3Audio,
+  4: week4Audio,
+  5: week5Audio,
+  6: week6Audio,
+  7: week7Audio,
+  10: week10Audio,
+  11: week11Audio,
+  12: week12Audio,
+};
 
 function KableLogo() {
   return (
@@ -41,29 +87,33 @@ export default function SectionPage() {
   const [videoError, setVideoError] = useState(false);
   const [audioError, setAudioError] = useState(false);
   const [videoUseStaticFallback, setVideoUseStaticFallback] = useState(false);
-  const [week1VideoUseRemote, setWeek1VideoUseRemote] = useState(false);
+  /** When true, skip bundled video for this section and use API / static URLs. */
+  const [videoSkipBundled, setVideoSkipBundled] = useState(false);
   const [audioUseStaticFallback, setAudioUseStaticFallback] = useState(false);
-  const [week1AudioUseRemote, setWeek1AudioUseRemote] = useState(false);
+  /** When true, skip bundled audio for this section and use API / static URLs. */
+  const [audioSkipBundled, setAudioSkipBundled] = useState(false);
 
   useEffect(() => {
     setVideoError(false);
     setVideoUseStaticFallback(false);
-    setWeek1VideoUseRemote(false);
+    setVideoSkipBundled(false);
     setAudioError(false);
     setAudioUseStaticFallback(false);
-    setWeek1AudioUseRemote(false);
+    setAudioSkipBundled(false);
   }, [id]);
 
+  const bundledVideoUrl = SECTION_BUNDLED_VIDEOS[id];
   const videoSrc = videoFilename
-    ? id === 1 && !week1VideoUseRemote
-      ? week1Video
+    ? bundledVideoUrl && !videoSkipBundled
+      ? bundledVideoUrl
       : videoUseStaticFallback
         ? getStaticMediaUrl(id, 'video', videoFilename)
         : getMediaUrl(id, 'video', videoFilename)
     : null;
+  const bundledAudioUrl = SECTION_BUNDLED_AUDIOS[id];
   const audioSrc = audioFilename
-    ? id === 1 && !week1AudioUseRemote
-      ? week1Audio
+    ? bundledAudioUrl && !audioSkipBundled
+      ? bundledAudioUrl
       : audioUseStaticFallback
         ? getStaticMediaUrl(id, 'audio', audioFilename)
         : getMediaUrl(id, 'audio', audioFilename)
@@ -107,8 +157,8 @@ export default function SectionPage() {
                     className="section-main-video"
                     aria-label={videoLabel || 'Week video'}
                     onError={() => {
-                      if (id === 1 && !week1VideoUseRemote) {
-                        setWeek1VideoUseRemote(true);
+                      if (bundledVideoUrl && !videoSkipBundled) {
+                        setVideoSkipBundled(true);
                       } else if (!videoUseStaticFallback) {
                         setVideoUseStaticFallback(true);
                       } else {
@@ -163,8 +213,8 @@ export default function SectionPage() {
                       className="section-audio-element"
                       aria-label="Audio lesson"
                       onError={() => {
-                        if (id === 1 && !week1AudioUseRemote) {
-                          setWeek1AudioUseRemote(true);
+                        if (bundledAudioUrl && !audioSkipBundled) {
+                          setAudioSkipBundled(true);
                         } else if (!audioUseStaticFallback) {
                           setAudioUseStaticFallback(true);
                         } else {
