@@ -153,7 +153,7 @@ export async function submitSectionQuizResult({ userEmail, sectionId, sectionTit
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.message || 'Failed to save quiz result');
-  return data; // includes stageUpdated: true when passed and moved to acceptance stage
+  return data;
 }
 
 /** Fetch section IDs released for this student's cohort (admin API). Returns [] if no cohort or not assigned yet – then student sees all sections. */

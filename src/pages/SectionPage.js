@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import week1Video from '../video/The Modern Hiring Process.mp4';
 import {
   WORKSHOP_TITLES,
   WORKSHOP_FOCUS,
@@ -39,10 +40,23 @@ export default function SectionPage() {
   const [videoError, setVideoError] = useState(false);
   const [audioError, setAudioError] = useState(false);
   const [videoUseStaticFallback, setVideoUseStaticFallback] = useState(false);
+  const [week1VideoUseRemote, setWeek1VideoUseRemote] = useState(false);
   const [audioUseStaticFallback, setAudioUseStaticFallback] = useState(false);
 
+  useEffect(() => {
+    setVideoError(false);
+    setVideoUseStaticFallback(false);
+    setWeek1VideoUseRemote(false);
+    setAudioError(false);
+    setAudioUseStaticFallback(false);
+  }, [id]);
+
   const videoSrc = videoFilename
-    ? (videoUseStaticFallback ? getStaticMediaUrl(id, 'video', videoFilename) : getMediaUrl(id, 'video', videoFilename))
+    ? id === 1 && !week1VideoUseRemote
+      ? week1Video
+      : videoUseStaticFallback
+        ? getStaticMediaUrl(id, 'video', videoFilename)
+        : getMediaUrl(id, 'video', videoFilename)
     : null;
   const audioSrc = audioFilename
     ? (audioUseStaticFallback ? getStaticMediaUrl(id, 'audio', audioFilename) : getMediaUrl(id, 'audio', audioFilename))
@@ -86,7 +100,9 @@ export default function SectionPage() {
                     className="section-main-video"
                     aria-label={videoLabel || 'Week video'}
                     onError={() => {
-                      if (!videoUseStaticFallback) {
+                      if (id === 1 && !week1VideoUseRemote) {
+                        setWeek1VideoUseRemote(true);
+                      } else if (!videoUseStaticFallback) {
                         setVideoUseStaticFallback(true);
                       } else {
                         setVideoError(true);
