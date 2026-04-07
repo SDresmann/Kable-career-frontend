@@ -94,7 +94,10 @@ export default function LifeSkillsPage() {
       <header className="page-header">
         <KableLogo />
         {user ? (
-          <button type="button" onClick={logout} className="header-auth-link">Sign out</button>
+          <div className="header-auth-actions">
+            <Link to="/account/password" className="header-auth-link">Change password</Link>
+            <button type="button" onClick={logout} className="header-auth-link">Sign out</button>
+          </div>
         ) : (
           <Link to="/login" className="header-auth-link">Log in</Link>
         )}

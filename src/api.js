@@ -67,6 +67,20 @@ export async function register(email, password) {
   return data;
 }
 
+/** Logged-in user: set a new password. Requires valid JWT in localStorage. */
+export async function changePassword(currentPassword, newPassword) {
+  const res = await fetch(`${API_BASE}/user/change-password`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ currentPassword, newPassword }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(data.message || 'Could not change password');
+  }
+  return data;
+}
+
 function getAdminBase() {
   const url =
     process.env.REACT_APP_KABLE_ADMIN_API_URL ||

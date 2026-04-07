@@ -9,12 +9,21 @@ import MaterialViewPage from './pages/MaterialViewPage';
 
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ChangePassword from './pages/ChangePassword';
 
 function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route
+        path="/account/password"
+        element={
+          <ProtectedRoute>
+            <ChangePassword />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/"
         element={
