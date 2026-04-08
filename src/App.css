@@ -1,1 +1,16 @@
 /* Global app styles (if any) – page-specific styles live in each page’s CSS */
+
+.route-loading {
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.route-loading-inner {
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  background: #f3f4f6;
+}

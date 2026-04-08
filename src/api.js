@@ -26,6 +26,21 @@ function getLoggedInEmail(override) {
   return auth?.email || '';
 }
 
+/** Short-lived cache so navigating between assignments/quizzes does not refetch the full list every time. */
+const SUBMISSIONS_TTL_MS = 60_000;
+let submissionsCache = null; // { email, data, at }
+
+const QUIZ_RESULTS_TTL_MS = 60_000;
+let quizResultsCache = null; // { email, data, at }
+
+export function invalidateSubmissionsCache() {
+  submissionsCache = null;
+}
+
+export function invalidateQuizResultsCache() {
+  quizResultsCache = null;
+}
+
 async function fetchWithRetry(url, options, retries = 4) {
   let lastRes = null;
   let lastData = null;
@@ -89,14 +104,26 @@ function getAdminBase() {
 }
 
 /** Fetch current user's file submissions (to check if assignment already submitted) */
-export async function getMySubmissions(userEmail) {
+export async function getMySubmissions(userEmail, options = {}) {
+  const { forceRefresh = false } = options;
   const adminBase = getAdminBase();
   const email = getLoggedInEmail(userEmail);
   if (!email || !adminBase) return { success: true, data: [] };
+  const now = Date.now();
+  if (
+    !forceRefresh &&
+    submissionsCache &&
+    submissionsCache.email === email &&
+    now - submissionsCache.at < SUBMISSIONS_TTL_MS
+  ) {
+    return { success: true, data: submissionsCache.data };
+  }
   const res = await fetch(`${adminBase}/api/submissions?userEmail=${encodeURIComponent(email)}`);
   const data = await res.json().catch(() => ({}));
   if (!res.ok) return { success: false, data: [] };
-  return { success: true, data: data.data || [] };
+  const list = data.data || [];
+  submissionsCache = { email, data: list, at: now };
+  return { success: true, data: list };
 }
 
 /** Submit checklist with file (e.g. Resume v1) – sends to backend, which can email recipient */
@@ -115,6 +142,7 @@ export async function submitChecklistWithFile(file, assignmentName = 'Resume v1 
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.message || 'Submission failed');
+  invalidateSubmissionsCache();
   return data;
 }
 
@@ -141,14 +169,26 @@ export async function submitAssignmentComment({ assignmentName, comment, userEma
 }
 
 /** Fetch current user's quiz results from admin (to check if section quiz already completed) */
-export async function getMyQuizResults(userEmail) {
+export async function getMyQuizResults(userEmail, options = {}) {
+  const { forceRefresh = false } = options;
   const adminBase = getAdminBase();
   const email = getLoggedInEmail(userEmail);
   if (!email || !adminBase) return { success: true, data: [] };
+  const now = Date.now();
+  if (
+    !forceRefresh &&
+    quizResultsCache &&
+    quizResultsCache.email === email &&
+    now - quizResultsCache.at < QUIZ_RESULTS_TTL_MS
+  ) {
+    return { success: true, data: quizResultsCache.data };
+  }
   const res = await fetch(`${adminBase}/api/quiz-results?userEmail=${encodeURIComponent(email)}`);
   const data = await res.json().catch(() => ({}));
   if (!res.ok) return { success: false, data: [] };
-  return { success: true, data: data.data || [] };
+  const list = data.data || [];
+  quizResultsCache = { email, data: list, at: now };
+  return { success: true, data: list };
 }
 
 /** Submit section quiz result so it appears in Kable Career Admin (optional: set REACT_APP_KABLE_ADMIN_API_URL) */
@@ -167,6 +207,7 @@ export async function submitSectionQuizResult({ userEmail, sectionId, sectionTit
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.message || 'Failed to save quiz result');
+  invalidateQuizResultsCache();
   return data;
 }
 
@@ -191,7 +232,7 @@ export function getMediaUrl(weekId, type, filename) {
   return `${base}/api/media/week/${weekId}/${type}/${encodeURIComponent(filename)}`;
 }
 
-/** Direct static path from frontend public/WeekN/{video|audio}/... (works on Render static site if files are deployed). */
+/** Fallback URL for week media if not bundled (expects copies under public/WeekN/{video|audio}/ when used). */
 export function getStaticMediaUrl(weekId, type, filename) {
   return `/Week${weekId}/${type}/${encodeURIComponent(filename)}`;
 }

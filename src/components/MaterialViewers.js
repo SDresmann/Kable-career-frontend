@@ -1,3 +1,5 @@
+import { getWeekAssignmentAssetUrl } from '../weekAssignmentAssets';
+
 export function getFileType(filename) {
   const lower = (filename || '').toLowerCase();
   if (/\.(png|jpe?g|gif|webp|svg)$/.test(lower)) return 'image';
@@ -67,7 +69,10 @@ export function PptxViewer({ url, label }) {
 }
 
 export function MaterialBlock({ item, sectionId }) {
-  const fileUrl = `/Week${sectionId}/assignments/${encodeURIComponent(item.file)}`;
+  const bundledUrl = getWeekAssignmentAssetUrl(sectionId, item.file);
+  const fileUrl =
+    bundledUrl ||
+    `/Week${sectionId}/assignments/${encodeURIComponent(item.file)}`;
   const type = getFileType(item.file);
 
   if (type === 'image') {

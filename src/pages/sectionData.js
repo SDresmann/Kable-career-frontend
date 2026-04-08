@@ -15,12 +15,12 @@ export const SECTION_TITLES = {
 
 /** Workshop titles shown on home page tiles. Weeks 10–12 show chapters 7–9. */
 export const WORKSHOP_TITLES = [
-  "The Job Market in 2026: What's Real, What's Noise, and How Not to Panic",
-  'Resumes, ATS, and AI: How You\'re Actually Being Screened',
-  'Visibility Without the Slop: Indeed & LinkedIn That Actually Work',
-  'Job Searching as a System: Tracking, Pace, and Burnout Prevention',
-  'Resume Tailoring That Makes Sense (and When Not to Apply)',
-  'Strategy Checkpoint: Are Your Results Matching Your Effort?',
+  "Introduction to Resume & What to Expect in CS",
+  'How Hiring Actually Works: ATS & AI',
+  'Building an Online Presence the Right Way (LinkedIn + Indeed)',
+  'First Career Report + Job Search System',
+  'Knowing When to Apply: Tailoring the Resume',
+  'Reverse Engineering the Role (Using AI)',
   "Professionalism in 2026: What Employers Are Reacting To",
   "Networking Without Feeling Gross (and Why It's Not Magic)",
   'Career Hygiene: Staying Employed, Sane, and Ready for What\'s Next',
@@ -34,7 +34,14 @@ export const WORKSHOP_FOCUS = [
   ['How hiring actually works right now', 'Why rejection and silence are normal', 'What Career Services can and can\'t control', 'Scam awareness (live examples)'],
   ['What ATS systems do (plain English)', 'Resume myths vs reality', 'Live walkthrough of a resume → ATS lens', 'Intro to ethical AI usage (reviewing, not lying)'],
   ['Recruiter search behavior', 'Why LinkedIn still matters (and how to ignore the noise)', 'What not to do on profiles', 'Live profile examples (good + bad)'],
-  ['Why tracking is stabilizing, not obsessive', 'Quality vs quantity applications', 'How to pace yourself without giving up', 'What "enough" looks like week to week'],
+  [
+    'Combine your data (resume, LinkedIn, Indeed, intake, 1:1) into your first Career Report',
+    'Understand what your data is saying',
+    'Identify strengths and gaps',
+    'Turn insights into action and strategy',
+    'Start structured tracking and intentional applications',
+    'Build a sustainable weekly pace',
+  ],
   ['Reading job descriptions critically', 'Required vs preferred qualifications', 'Live example: tailoring one resume', 'Using AI to analyze, not fabricate'],
   ['Reviewing tracker data', 'Interpreting early signals', 'When to adjust resume vs strategy', 'Normalizing pivots'],
   ['Communication breakdowns employers complain about', 'Reliability, follow-through, boundaries', 'Team dynamics in modern workplaces', 'Real scenarios and discussion'],
@@ -48,6 +55,9 @@ export const WORKSHOP_FOCUS = [
 /** Course materials (chapter readings) – first lesson in each section */
 export const CHAPTER_READING_DOC_URL = 'https://docs.google.com/document/d/1h5yCLuHFuXbCl_BCiNje6DVHmM9EaTA0ONEI1-GGdhU/edit?tab=t.0';
 
+/** Week 1 intake – set `REACT_APP_WEEK1_INTAKE_FORM_URL` in `.env` to your Google Form or Typeform URL. */
+export const WEEK1_INTAKE_FORM_URL = process.env.REACT_APP_WEEK1_INTAKE_FORM_URL || '';
+
 function getReadChapterContent(chapterNum) {
   return {
     title: `Read chapter ${chapterNum}`,
@@ -58,10 +68,12 @@ function getReadChapterContent(chapterNum) {
   };
 }
 
-/** Assignment options per section – "Read chapter N" is always the first lesson */
-const SECTION_1_REST = [
-  'How Hiring Actually Works (and Why It\'s Not Personal)',
-  'Questions',
+/** Week 1 – onboarding only (no chapter read / reflections in app). */
+const SECTION_1_ASSIGNMENTS = [
+  'Intake Form (required)',
+  'Resume Submission (required)',
+  'LinkedIn URL (optional)',
+  'AI Consent',
 ];
 const SECTION_2_REST = [
   'Resume Foundations, ATS & AI',
@@ -71,19 +83,12 @@ const SECTION_2_REST = [
 const SECTION_3_REST = [
   'LinkedIn & Indeed Profile Setup',
 ];
-const SECTION_4_REST = [
-  'Building Your AI Career Strategist Using NotebookLM',
-  'Schedule Your First One-on-One',
-  'Access NotebookLM (Google Notebook)',
-];
+const SECTION_4_REST = ['Schedule Your First One-on-One'];
 const SECTION_5_REST = [
   'Resume Alignment Assignment',
-  'Finalize LinkedIn & Indeed Profiles',
   'Mock Interview with Nick (Recruiter Practice)',
 ];
-const SECTION_6_REST = [
-  'Professional Presence, Discomfort & Ownership',
-];
+const SECTION_6_REST = [];
 const SECTION_7_REST = [
   'Build Your Story',
 ];
@@ -111,37 +116,26 @@ const SECTION_12_REST = [
 ];
 export const PLACEHOLDER_ASSIGNMENT_OPTIONS = ['Assignment 1', 'Assignment 2', 'Assignment 3', 'Assignment 4'];
 
-/** Main video filename per section (in public/WeekN/video/). Empty for weeks with no video. */
+/** Main week video: disabled (no video for any section). */
 export const SECTION_VIDEO = {
-  1: 'The Modern Hiring Process.mp4',
-  2: 'Building_a_Winning_Resume.mp4',
-  3: 'Being_Findable_Online.mp4',
-  4: 'Build_Your_Job_Search_OS.mp4',
-  5: 'Cracking_the_Code.mp4',
-  6: 'Your_Career_Toolkit.mp4',
-  7: 'Ace_Your_Tech_Interview.mp4',
+  1: null,
+  2: null,
+  3: null,
+  4: null,
+  5: null,
+  6: null,
+  7: null,
   8: null,
   9: null,
-  10: 'The_Unwritten_Rules.mp4',
-  11: 'Job_Search_Resilience.mp4',
-  12: 'A_Practical_Philosophy_of_Money.mp4',
+  10: null,
+  11: null,
+  12: null,
 };
 
-/** Display label for the main video (used in "Choose a video" list). */
-export const SECTION_VIDEO_LABEL = {
-  1: 'The Modern Hiring Process',
-  2: 'Building a Winning Resume',
-  3: 'Being Findable Online',
-  4: 'Build Your Job Search OS',
-  5: 'Cracking the Code',
-  6: 'Your Career Toolkit',
-  7: 'Ace Your Tech Interview',
-  10: 'The Unwritten Rules',
-  11: 'Job Search Resilience',
-  12: 'A Practical Philosophy of Money',
-};
+/** Unused while SECTION_VIDEO is empty; kept for API stability. */
+export const SECTION_VIDEO_LABEL = {};
 
-/** Audio filename per section (in public/WeekN/audio/). Empty for weeks with no audio. */
+/** Audio filename per section (files under src/WeekN/audio/). Empty for weeks with no audio. */
 export const SECTION_AUDIO = {
   1: 'Audio Lecture.m4a',
   2: 'Engineer_Your_Resume_for_Robots_and_Recruiters.m4a',
@@ -157,65 +151,28 @@ export const SECTION_AUDIO = {
   12: 'Don_t_go_broke_with_your_first_paycheck.m4a',
 };
 
-/** Assignment materials (docx, pptx, png) for download per section. { label, file } in public/WeekN/assignments/. */
+/** Assignment materials (docx, etc.). Files live under src/WeekN/assignments/ (see weekAssignmentAssets.js).
+ *  Presentations (.pptx), infographics (.png), and blog/newsletter/article-style handouts are omitted from the list. */
 export const SECTION_ASSIGNMENT_FILES = {
-  1: [
-    { label: 'Week One Newsletter and Blog Post', file: 'Week One Newsletter and Blog Post.docx' },
-    { label: 'Week One – Modern Hiring Systems (Presentation)', file: 'Week One- Modern Hiring Systems, Recruiter Behavior & Candidate Strategy.pptx' },
-    { label: 'Presentation', file: 'Presentation.pptx' },
-    { label: 'Week 1 Infographic', file: 'Week 1 - Infographic.png' },
-  ],
-  2: [
-    { label: 'Week 2 Presentation', file: 'Week 2 Presentation.pptx' },
-  ],
-  3: [
-    { label: 'Week 3 Presentation', file: 'Week 3 Presentation.pptx' },
-  ],
-  4: [
-    { label: 'Week 4 Job Search OS (Presentation)', file: 'Week4_Job_Search_OS.pptx' },
-  ],
-  5: [
-    { label: 'Resume Tailoring & AI Alignment (Presentation)', file: 'Week5_Resume_Tailoring_AI_Alignment.pptx' },
-    { label: 'Email Newsletter', file: 'email_newsletter.docx' },
-    { label: 'LinkedIn Article', file: 'linkedin_article.docx' },
-    { label: 'Resume Checklist', file: 'resume_checklist (1).docx' },
-  ],
-  6: [
-    { label: 'Communication Workshop (Presentation)', file: 'Week6_Communication_Workshop.pptx' },
-    { label: 'Email Newsletter – Comms', file: 'email_newsletter_comms.docx' },
-    { label: 'LinkedIn Soft Skills', file: 'linkedin_soft_skills.docx' },
-    { label: 'Professionalism Playbook', file: 'professionalism_playbook.docx' },
-    { label: 'Infographic', file: 'unnamed (2).png' },
-  ],
-  7: [
-    { label: 'Interview Workshop (Presentation)', file: 'week7_interview_workshop (1).pptx' },
-    { label: 'Interview Newsletter', file: 'interview_newsletter.docx' },
-    { label: 'LinkedIn Interview Article', file: 'linkedin_interview_article.docx' },
-    { label: 'LinkedIn Interview Article (alt)', file: 'linkedin_interview_article (1).docx' },
-  ],
-  8: [
-    { label: 'Week 8 Hiring System (Presentation)', file: 'Week8_HiringSystem.pptx' },
-    { label: 'Hiring Newsletter', file: 'hiring_newsletter.docx' },
-    { label: 'Hiring System Guide', file: 'hiring_system_guide.docx' },
-    { label: 'LinkedIn Hiring Article', file: 'linkedin_hiring_article.docx' },
-  ],
+  1: [],
+  2: [],
+  3: [],
+  4: [],
+  5: [],
+  6: [{ label: 'Professionalism Playbook', file: 'professionalism_playbook.docx' }],
+  7: [],
+  8: [{ label: 'Hiring System Guide', file: 'hiring_system_guide.docx' }],
   9: [],
-  10: [
-    { label: 'Week 10 Presentation', file: 'Week 10.pptx' },
-  ],
-  11: [
-    { label: 'Week 11 Presentation', file: 'Week 11.pptx' },
-  ],
-  12: [
-    { label: 'Financial Stability Workshop (Presentation)', file: 'Financial_Stability_Workshop (1).pptx' },
-  ],
+  10: [],
+  11: [],
+  12: [],
 };
 
 /** Returns full assignment list for a section (Read chapter N first, then section-specific or placeholders) */
 export function getAssignmentOptions(sectionId) {
   const id = parseInt(sectionId, 10) || 1;
   const readChapter = `Read chapter ${id}`;
-  if (id === 1) return [readChapter, ...SECTION_1_REST];
+  if (id === 1) return [...SECTION_1_ASSIGNMENTS];
   if (id === 2) return [readChapter, ...SECTION_2_REST];
   if (id === 3) return [readChapter, ...SECTION_3_REST];
   if (id === 4) return [readChapter, ...SECTION_4_REST];
@@ -659,60 +616,55 @@ export const SECTION_12_QUIZ = [
 /** Optional content for specific assignments (sectionId -> assignmentIndex -> content) */
 export const ASSIGNMENT_CONTENT = {
   1: {
-    0: getReadChapterContent(1),
+    0: {
+      title: 'Intake Form',
+      summary: 'Complete the program intake (required).',
+      body: `Before you begin, complete the official intake form so we have your details and can support you properly.
+
+If your instructor has shared a link, use the button below. If no link appears, check your email or ask your instructor for the form URL.
+
+After you submit the form, click the button below to confirm you have completed it.`,
+      ...(WEEK1_INTAKE_FORM_URL
+        ? { linkUrl: WEEK1_INTAKE_FORM_URL, linkLabel: 'Open intake form' }
+        : {}),
+      submitButtonOnly: true,
+      submitButtonOnlyComment: 'I have completed the intake form.',
+    },
     1: {
-      title: 'How Hiring Actually Works (and Why It\'s Not Personal)',
-      summary: 'Week 1 – The Job Market in 2026',
-      image: '/images/week1-how-hiring-works.png',
-      imageAlt: 'Kable Academy - KableAcademy.com',
-      body: `How Hiring Actually Works (and Why It's Not Personal)
+      title: 'Resume Submission',
+      summary: 'Upload your resume file or share a resume builder link.',
+      body: `Submit your resume in one of two ways:
 
-Looking for a job can feel emotional, confusing, and unfair.
-That's because in many ways, it is.
+• Upload a file (PDF, Word, or similar), **or**
+• Paste a link to your resume (Google Docs, Canva, LinkedIn resume builder, or another tool).
 
-Most job seekers assume that if they are qualified and apply carefully (or in bulk), they should receive an interview. Unfortunately, modern hiring doesn't work that simply.
-
-Companies receive large numbers of applications. To manage this, they use software systems (often called Applicant Tracking Systems or ATS) to sort and filter candidates before a human ever reviews them.
-
-Even after that, many other factors influence decisions:
-• timing
-• internal referrals
-• shifting budgets
-• role changes
-• or the company deciding not to hire at all
-
-Ghost Postings
-
-Because of this, rejection is common and does not mean you are unqualified or incapable.
-
-Career Services exists to help you improve your odds by:
-• strengthening your materials
-• improving how you present your skills
-• helping you understand employer behavior
-• and creating repeatable systems
-
-But no system can remove competition or randomness completely.
-
-Your job search is not a test of your worth.
-It is a process of probability, persistence, and adaptation.
-
-The goal of this program is not perfection.
-The goal is progress, clarity, and resilience.`,
-      submitComment: true,
-      commentPlaceholder: 'Add a comment or reflection for your instructor (optional).',
-      commentSubmitLabel: 'Submit comment',
+You only need to do one of these—not both.`,
+      resumeLinkOrFile: true,
+      checklistTitle: 'Resume Submission',
     },
     2: {
-      title: 'Questions',
-      summary: 'Reflect on how hiring works and your job search',
-      questions: [
-        'What surprised you most about how hiring actually works?',
-        'What part of the job search process do you think will be hardest for you?',
-        'What is one mindset shift you need to make going forward?',
-      ],
+      title: 'LinkedIn URL',
+      summary: 'Optional — share your LinkedIn profile with your instructor.',
+      body: `If you have a LinkedIn profile and want your instructor to review it, paste your profile URL below. You may leave this blank and submit to skip.`,
       submitComment: true,
-      commentPlaceholder: 'Answer the reflection questions above.',
-      commentSubmitLabel: 'Submit my responses',
+      linkedinOptional: true,
+      commentPlaceholder: 'https://www.linkedin.com/in/your-profile (optional)',
+      commentSubmitLabel: 'Save',
+    },
+    3: {
+      title: 'AI Consent',
+      summary: 'Required acknowledgment for use of AI tools in this program.',
+      body: `This program may introduce tools that use artificial intelligence (for example, to help you draft or review resumes, practice interview answers, or organize your job search).
+
+By proceeding, you acknowledge that:
+• AI outputs are suggestions only—you are responsible for accuracy and honesty in what you submit to employers.
+• You will not misrepresent AI-generated content as wholly original work where that would violate an employer’s or school’s rules.
+• Instructors may recommend AI tools for learning purposes; use is voluntary where alternatives exist.
+
+If you have questions about this policy, contact your instructor before continuing.`,
+      aiConsentRequired: true,
+      aiConsentLabel:
+        'I have read the above and I consent to participating in activities that may involve AI tools as described.',
     },
   },
   2: {
@@ -840,130 +792,14 @@ I will have it pulled up during our 1:1 and I will grade in real time.`,
   4: {
     0: getReadChapterContent(4),
     1: {
-      title: 'Building Your AI Career Strategist Using NotebookLM',
-      summary: 'Section 4 – Job Searching as a System',
-      body: `Assignment Objective
-
-This week, you will build a structured AI Career Strategist using NotebookLM.
-Your goal is to train NotebookLM using authoritative, research-backed career sources so that it can support you in:
-
-• Behavioral interview preparation
-• Resume optimization and ATS alignment
-• Job description analysis
-• Understanding labor market data and salary expectations
-• Strategic career planning
-
-This assignment is designed to help you build a professional, research-informed job search system that you can use throughout your career.
-
-Why This Matters
-
-NotebookLM only uses the sources you upload.
-The quality of your AI responses depends entirely on the quality of your sources.
-This assignment teaches you how to:
-
-• Identify credible professional resources
-• Filter out low-quality advice
-• Train AI intentionally
-• Build a strategic job search support system
-
-Step 1: Use Perplexity to Identify 15 Authoritative Sources
-
-Go to Perplexity and use the prompt below exactly as written:
-
-Perplexity Prompt
-
-I am building a career services AI assistant using NotebookLM.
-I need 15 authoritative, high-quality sources (preferably research-backed, recruiter-informed, or government-based) that I can upload into NotebookLM to train it in the following areas:
-
-• Behavioral interviewing and STAR method best practices
-• Resume optimization and ATS alignment
-• Job description analysis and keyword extraction
-• Entry-level IT hiring trends and recruiter expectations
-• Career planning frameworks for early-career professionals
-• Labor market data (especially tech and IT support roles)
-
-Please prioritize:
-
-• Government (.gov) sources
-• Reputable career organizations
-• SHRM, Harvard Business Review, McKinsey, or similar institutions
-• Recruiter-informed articles
-• Data-driven reports
-
-Avoid generic blog posts.
-Provide direct links to upload-ready PDFs or long-form resources.
-
-Step 2: Upload All 15 Sources into NotebookLM
-
-You must upload all 15 sources into your NotebookLM project.
-Your collection should include representation from each of the following categories:
-
-• Labor Market and Salary Data — Minimum: 3 sources
-• Interview Strategy and Behavioral Frameworks — Minimum: 3 sources
-• Resume and ATS Optimization — Minimum: 3 sources
-• Career Planning and Professional Development — Minimum: 3 sources
-• Industry-Specific IT Hiring Trends — Minimum: 3 sources
-
-You may exceed these minimums as long as you upload at least 15 total sources.
-
-Step 3: Organize Your Notebook
-
-Inside NotebookLM, create clearly labeled sections:
-
-• Interview Strategy
-• Resume and ATS
-• Labor Market Data
-• Career Planning
-• IT / Industry-Specific Hiring Trends
-
-Organizing your sources improves clarity and response quality.
-
-Step 4: Test Your AI Career Strategist
-
-After uploading and organizing your sources, test your system with at least three structured prompts.
-
-Examples:
-
-Interview Preparation — Based only on the uploaded Interview Strategy sources, generate five behavioral interview questions for an entry-level IT Support role.
-
-Resume Alignment — Using the ATS and resume optimization principles from the uploaded sources, evaluate my resume against this job description and identify keyword gaps and alignment opportunities.
-
-Market Reality Check — Based on the labor market data uploaded, what is a realistic starting salary for an entry-level Help Desk Technician in my state?
-
-Career Planning — Based on the uploaded career planning frameworks, outline a 12-month development plan for someone entering IT.
-
-1:1 Discussion
-
-During your individual meeting, we will:
-
-• Review the quality and credibility of your selected sources
-• Evaluate how effectively you trained your AI system
-• Discuss how you can use this Notebook strategically in your job search
-• Identify gaps or improvements in your career preparation
-
-This meeting will focus on your thinking process, not just completion.`,
-      submitComment: true,
-      commentPlaceholder: 'Add a comment or confirmation for your instructor (e.g., sources uploaded, prompts tested).',
-      commentSubmitLabel: 'Submit comment',
-    },
-    2: {
       title: 'Schedule Your First One-on-One',
       summary: 'Section 4 – Book a meeting with your instructor',
       body: `Schedule a one-on-one meeting with your instructor to discuss your progress, get feedback, and plan next steps.`,
       linkUrl: 'https://ka.kableacademy.com/meetings/matthew-kohlmorgen?uuid=ebea851c-2a63-4c8d-8152-15e73e49b6c2',
       linkLabel: 'Schedule your first one-on-one',
       submitButtonOnly: true,
+      submitButtonOnlyComment: 'I scheduled my first one-on-one.',
       commentSubmitLabel: 'Mark complete',
-    },
-    3: {
-      title: 'Access NotebookLM (Google Notebook)',
-      summary: 'Section 4 – Sign in with Google to use NotebookLM',
-      body: `NotebookLM runs on Google and requires a Google account. Use the link below to open NotebookLM. If you are not already signed in, you will be prompted to sign in with your Google account so you can create and use your AI Career Strategist notebook.`,
-      linkUrl: 'https://notebooklm.google.com',
-      linkLabel: 'Open NotebookLM — Sign in with Google',
-      submitComment: true,
-      commentPlaceholder: 'Confirm access or add a note for your instructor (optional).',
-      commentSubmitLabel: 'Submit comment',
     },
   },
   5: {
@@ -1023,42 +859,17 @@ Record:
 • Updated score
 • Key improvements identified
 
-Step 5 – Email Submission
+Step 5 – Submit your work
 
-Email the following to me:
+Use the box below to submit:
 
-• Resume v1 (original)
-• Resume v2 (tailored)
-• Job description
-• Copy whatever score the AI gave you. It's okay if the email is long.
-
-3–5 bullet reflection insights:
-
-• What themes were repeated?
-• What was your biggest misalignment?
-• Did your score improve?
-• What skill gaps did you notice?
-
-Subject Line Format:
-
-Week 5 – Resume Alignment – [Your Name]`,
+• 3–5 bullet reflection insights (what themes were repeated, biggest misalignment, whether your score improved, skill gaps you noticed)
+• A short note that you have Resume v1, Resume v2, and the job description ready to share with your instructor (e.g. in your next 1:1, as they direct).`,
       submitComment: true,
-      commentPlaceholder: 'Paste your reflection insights, or confirm you emailed the materials.',
+      commentPlaceholder: 'Paste your reflection insights and how you will share v1/v2 + job description with your instructor.',
       commentSubmitLabel: 'Submit comment',
     },
     1: {
-      title: 'Finalize LinkedIn & Indeed Profiles',
-      summary: 'Section 5 – Profiles due by Friday',
-      body: `Your LinkedIn and Indeed profiles should be finalized and completed by this week. If they are not, then please turn them in by midnight this Friday.
-
-If you need help with your headlines, summaries, experience sections, etc., then please book a 1:1 with me and we can go over them.`,
-      linkUrl: 'https://ka.kableacademy.com/meetings/matthew-kohlmorgen?uuid=b483d0fa-a9aa-4580-b59b-3f100208b6ae',
-      linkLabel: 'Book a 1:1 for profile help',
-      submitComment: true,
-      commentPlaceholder: 'Add a comment or confirm your profiles are complete (optional).',
-      commentSubmitLabel: 'Submit comment',
-    },
-    2: {
       title: 'Mock Interview with Nick (Recruiter Practice)',
       summary: 'Section 5 – Practice speaking with recruiters',
       body: `Alright class — this week is a little different.
@@ -1086,7 +897,6 @@ Please use Nick's calendar below.`,
       commentSubmitLabel: 'Submit comment',
     },
   },
-  6: { 0: getReadChapterContent(6) },
   7: {
     0: {
       title: 'Professional Scenarios – Written Responses',

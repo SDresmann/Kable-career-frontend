@@ -4,6 +4,17 @@
   background: #ffffff;
 }
 
+.media-loading-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  background: #f3f4f6;
+  color: #6b7280;
+  font-size: 0.95rem;
+  border-radius: 8px;
+}
+
 .section-page .page-header {
   padding: 1.25rem 2rem;
   background: #fff;
@@ -97,7 +108,13 @@
   font-size: 1rem;
 }
 
-/* Block 1: Objectives (dark grey) + Video */
+/* Block 1: Objectives only (no week video) */
+.block-objectives-only {
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin-bottom: 0;
+}
+
 .block-objectives-video {
   grid-template-columns: 1fr 1.4fr;
   gap: 0;
@@ -535,6 +552,7 @@
 }
 
 @media (max-width: 700px) {
+  .block-objectives-only,
   .block-objectives-video,
   .block-quiz-audio,
   .block-videos,

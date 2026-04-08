@@ -1,18 +1,29 @@
+import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
-import LifeSkillsPage from './pages/LifeSkills';
-import SectionPage from './pages/SectionPage';
-import AssignmentPage from './pages/AssignmentPage';
-import QuizPage from './pages/QuizPage';
-import MaterialsPage from './pages/MaterialsPage';
-import MaterialViewPage from './pages/MaterialViewPage';
+import './App.css';
 
-import Login from './pages/Login';
-import Register from './pages/Register';
-import ChangePassword from './pages/ChangePassword';
+const LifeSkillsPage = lazy(() => import('./pages/LifeSkills'));
+const SectionPage = lazy(() => import('./pages/SectionPage'));
+const AssignmentPage = lazy(() => import('./pages/AssignmentPage'));
+const QuizPage = lazy(() => import('./pages/QuizPage'));
+const MaterialsPage = lazy(() => import('./pages/MaterialsPage'));
+const MaterialViewPage = lazy(() => import('./pages/MaterialViewPage'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const ChangePassword = lazy(() => import('./pages/ChangePassword'));
+
+function RouteLoading() {
+  return (
+    <div className="route-loading" role="status" aria-live="polite">
+      <span className="route-loading-inner">Loading…</span>
+    </div>
+  );
+}
 
 function App() {
   return (
+    <Suspense fallback={<RouteLoading />}>
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
@@ -73,6 +84,7 @@ function App() {
         }
       />
     </Routes>
+    </Suspense>
   );
 }
 

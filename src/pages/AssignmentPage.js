@@ -49,8 +49,13 @@ export default function AssignmentPage() {
   const [commentSubmitError, setCommentSubmitError] = useState('');
   const [alreadySubmittedFile, setAlreadySubmittedFile] = useState(false);
   const [submissionsCheckLoading, setSubmissionsCheckLoading] = useState(!!user?.email);
+  const [resumeLinkText, setResumeLinkText] = useState('');
+  const [resumeSubmitLocked, setResumeSubmitLocked] = useState(false);
+  const [aiConsentChecked, setAiConsentChecked] = useState(false);
+  const [consentSubmitStatus, setConsentSubmitStatus] = useState('idle');
+  const [consentSubmitError, setConsentSubmitError] = useState('');
 
-  // Stable name for this assignment's file submission (so we can block duplicate uploads)
+  // Stable name for file / resume submission (matches admin submissions & comments)
   const assignmentNameForFile = `Section ${sectionNum} - ${content?.checklistTitle || assignmentTitle || 'Checklist'}`;
 
   useEffect(() => {
@@ -65,10 +70,20 @@ export default function AssignmentPage() {
     setCommentSubmitStatus('idle');
     setCommentSubmitError('');
     setAlreadySubmittedFile(false);
+    setResumeLinkText('');
+    setResumeSubmitLocked(false);
+    setAiConsentChecked(false);
+    setConsentSubmitStatus('idle');
+    setConsentSubmitError('');
   }, [sectionNum, index]);
 
   useEffect(() => {
-    if (!user?.email || content?.checklistWithoutFile) {
+    if (
+      !user?.email ||
+      content?.checklistWithoutFile ||
+      content?.resumeLinkOrFile ||
+      content?.submitButtonOnly
+    ) {
       setSubmissionsCheckLoading(false);
       return;
     }
@@ -87,7 +102,30 @@ export default function AssignmentPage() {
       setSubmissionsCheckLoading(false);
     });
     return () => { cancelled = true; };
-  }, [user?.email, assignmentNameForFile, content?.checklistWithoutFile]);
+  }, [
+    user?.email,
+    assignmentNameForFile,
+    content?.checklistWithoutFile,
+    content?.resumeLinkOrFile,
+    content?.submitButtonOnly,
+  ]);
+
+  useEffect(() => {
+    if (!user?.email || !content?.resumeLinkOrFile) return;
+    let cancelled = false;
+    setSubmissionsCheckLoading(true);
+    getMySubmissions(user.email).then(({ data }) => {
+      if (cancelled) return;
+      const list = data || [];
+      const name = assignmentNameForFile.trim();
+      const hasFile = list.some((s) => (s.assignmentName || '').trim() === name);
+      if (hasFile) setResumeSubmitLocked(true);
+      setSubmissionsCheckLoading(false);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.email, content?.resumeLinkOrFile, assignmentNameForFile]);
 
   const handleResponseChange = (i, value) => {
     const next = [...responses];
@@ -108,6 +146,36 @@ export default function AssignmentPage() {
     });
   };
 
+  const handleResumeLinkOrFileSubmit = async (e) => {
+    e.preventDefault();
+    const file = checklistFile;
+    const link = resumeLinkText.trim();
+    if (!file && !link) {
+      setChecklistSubmitError('Upload a resume file or paste a resume builder link.');
+      return;
+    }
+    setChecklistSubmitStatus('sending');
+    setChecklistSubmitError('');
+    try {
+      if (file) {
+        await submitChecklistWithFile(file, assignmentNameForFile, user?.email || '');
+      } else {
+        await submitAssignmentComment({
+          assignmentName: assignmentNameForFile,
+          comment: `Resume link (builder / Google Docs / etc.): ${link}`,
+          userEmail: user?.email || '',
+          sectionId: sectionNum,
+          assignmentIndex: index,
+        });
+      }
+      setChecklistSubmitStatus('success');
+      setResumeSubmitLocked(true);
+    } catch (err) {
+      setChecklistSubmitStatus('error');
+      setChecklistSubmitError(err.message || 'Submission failed. Please try again.');
+    }
+  };
+
   const handleChecklistFileSubmit = async (e) => {
     e.preventDefault();
     if (!checklistFile) {
@@ -126,11 +194,35 @@ export default function AssignmentPage() {
     }
   };
 
+  const handleAiConsentSubmit = async (e) => {
+    e.preventDefault();
+    if (!aiConsentChecked) {
+      setConsentSubmitError('Please check the box to confirm your consent.');
+      return;
+    }
+    setConsentSubmitStatus('sending');
+    setConsentSubmitError('');
+    try {
+      await submitAssignmentComment({
+        assignmentName: content?.title || assignmentTitle,
+        comment: 'AI consent: I have read and consent to the use of AI tools as described on this page.',
+        userEmail: user?.email || '',
+        sectionId: sectionNum,
+        assignmentIndex: index,
+      });
+      setConsentSubmitStatus('success');
+    } catch (err) {
+      setConsentSubmitStatus('error');
+      setConsentSubmitError(err.message || 'Submission failed. Please try again.');
+    }
+  };
+
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     const trimmed = commentText.trim();
     const isButtonOnly = content?.submitButtonOnly;
-    if (!isButtonOnly && !trimmed) {
+    const linkedinOptional = content?.linkedinOptional;
+    if (!isButtonOnly && !linkedinOptional && !trimmed) {
       setCommentSubmitError('Please enter your profile link or a comment.');
       return;
     }
@@ -139,7 +231,11 @@ export default function AssignmentPage() {
     try {
       const payload = {
         assignmentName: content?.title || assignmentTitle,
-        comment: isButtonOnly ? (content.submitButtonOnlyComment || 'Completed') : trimmed,
+        comment: isButtonOnly
+          ? (content.submitButtonOnlyComment || 'Completed')
+          : linkedinOptional && !trimmed
+            ? '(No LinkedIn URL provided — optional skipped.)'
+            : trimmed,
         userEmail: user?.email || '',
         sectionId: sectionNum,
         assignmentIndex: index,
@@ -210,6 +306,88 @@ export default function AssignmentPage() {
               )}
             </p>
           )}
+          {content?.aiConsentRequired && (
+            <form className="assignment-ai-consent-form" onSubmit={handleAiConsentSubmit}>
+              {consentSubmitStatus === 'success' ? (
+                <p className="assignment-form-thanks">Your consent has been recorded. Thank you.</p>
+              ) : (
+                <>
+                  <label className="assignment-ai-consent-label">
+                    <input
+                      type="checkbox"
+                      checked={aiConsentChecked}
+                      onChange={(e) => setAiConsentChecked(e.target.checked)}
+                      disabled={consentSubmitStatus === 'sending'}
+                    />
+                    <span>{content.aiConsentLabel}</span>
+                  </label>
+                  {consentSubmitError && (
+                    <p className="assignment-checklist-error">{consentSubmitError}</p>
+                  )}
+                  <button
+                    type="submit"
+                    className="btn-submit"
+                    disabled={consentSubmitStatus === 'sending' || !aiConsentChecked}
+                  >
+                    {consentSubmitStatus === 'sending' ? 'Sending…' : 'Submit consent'}
+                  </button>
+                </>
+              )}
+            </form>
+          )}
+          {content?.resumeLinkOrFile && (
+            <div className="assignment-resume-block">
+              {submissionsCheckLoading ? (
+                <p className="assignment-checklist-hint">Checking submission status…</p>
+              ) : resumeSubmitLocked || checklistSubmitStatus === 'success' ? (
+                <div className="assignment-already-submitted">
+                  <p className="assignment-already-message">Your resume has been submitted. Thank you.</p>
+                </div>
+              ) : (
+                <form className="assignment-resume-form" onSubmit={handleResumeLinkOrFileSubmit}>
+                  <div className="assignment-resume-upload">
+                    <label htmlFor="resume-file">Upload resume file (PDF, Word, etc.):</label>
+                    <input
+                      id="resume-file"
+                      type="file"
+                      accept=".pdf,.doc,.docx,.txt,image/*"
+                      onChange={(e) => setChecklistFile(e.target.files?.[0] || null)}
+                    />
+                    {checklistFile && (
+                      <span className="assignment-checklist-filename">{checklistFile.name}</span>
+                    )}
+                  </div>
+                  <p className="assignment-resume-or" role="separator">— or —</p>
+                  <div className="assignment-resume-link-field">
+                    <label htmlFor="resume-link">Paste resume builder / Google Docs / share link:</label>
+                    <input
+                      id="resume-link"
+                      type="text"
+                      inputMode="url"
+                      autoComplete="url"
+                      className="assignment-question-input"
+                      value={resumeLinkText}
+                      onChange={(e) => setResumeLinkText(e.target.value)}
+                      placeholder="https://..."
+                    />
+                  </div>
+                  {checklistSubmitStatus === 'error' && checklistSubmitError && (
+                    <p className="assignment-checklist-error">{checklistSubmitError}</p>
+                  )}
+                  <button
+                    type="submit"
+                    className="btn-submit"
+                    disabled={
+                      checklistSubmitStatus === 'sending' ||
+                      (!checklistFile && !resumeLinkText.trim())
+                    }
+                  >
+                    {checklistSubmitStatus === 'sending' ? 'Sending…' : 'Submit resume'}
+                  </button>
+                </form>
+              )}
+            </div>
+          )}
           {questions.length > 0 && (
             <form className="assignment-questions-form" onSubmit={handleSubmit}>
               {submitted ? (
@@ -234,7 +412,7 @@ export default function AssignmentPage() {
               )}
             </form>
           )}
-          {checklistItems.length > 0 && (
+          {checklistItems.length > 0 && !content?.resumeLinkOrFile && (
             <div className="assignment-checklist">
               <h3 className="assignment-checklist-title">{content?.checklistTitle || 'Resume v1 Checklist'}</h3>
               <ul className="assignment-checklist-list">
@@ -327,6 +505,10 @@ export default function AssignmentPage() {
                         ))}
                       </ul>
                     </div>
+                  ) : content?.linkedinOptional ? (
+                    <label htmlFor="assignment-comment" className="assignment-comment-label">
+                      LinkedIn profile URL (optional):
+                    </label>
                   ) : (
                     <label htmlFor="assignment-comment" className="assignment-comment-label">
                       Add your LinkedIn profile link or comment for your instructor:
@@ -354,13 +536,24 @@ export default function AssignmentPage() {
               <button
                 type="submit"
                 className="btn-submit"
-                disabled={commentSubmitStatus === 'sending' || (!content?.submitButtonOnly && !commentText.trim())}
+                disabled={
+                  commentSubmitStatus === 'sending' ||
+                  (!content?.submitButtonOnly &&
+                    !content?.linkedinOptional &&
+                    !commentText.trim())
+                }
               >
                 {commentSubmitStatus === 'sending' ? 'Sending…' : (content.commentSubmitLabel || 'Submit comment')}
               </button>
             </form>
           )}
-          {!content?.body && questions.length === 0 && checklistItems.length === 0 && (
+          {!content?.body &&
+            questions.length === 0 &&
+            checklistItems.length === 0 &&
+            !content?.resumeLinkOrFile &&
+            !content?.aiConsentRequired &&
+            !content?.submitButtonOnly &&
+            !content?.submitComment && (
             <p className="assignment-placeholder">Assignment content will appear here. Check back later or use the workbook for this section.</p>
           )}
         </div>

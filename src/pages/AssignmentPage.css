@@ -368,3 +368,58 @@
 .assignment-actions .btn-outline:hover {
   background: #eff6ff;
 }
+
+.assignment-ai-consent-form {
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.assignment-ai-consent-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #374151;
+  cursor: pointer;
+}
+
+.assignment-ai-consent-label input {
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+}
+
+.assignment-ai-consent-form .btn-submit {
+  margin-top: 1rem;
+}
+
+.assignment-resume-block {
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  background: #f0fdf4;
+  border: 1px solid rgba(110, 207, 129, 0.4);
+  border-radius: 8px;
+}
+
+.assignment-resume-upload label,
+.assignment-resume-link-field label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.35rem;
+}
+
+.assignment-resume-or {
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+}
+
+.assignment-resume-link-field {
+  margin-bottom: 1rem;
+}

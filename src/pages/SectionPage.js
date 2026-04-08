@@ -1,64 +1,28 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import week1Video from '../video/The Modern Hiring Process.mp4';
-import week2Video from '../video/Building_a_Winning_Resume.mp4';
-import week3Video from '../video/Being_Findable_Online.mp4';
-import week4Video from '../video/Build_Your_Job_Search_OS.mp4';
-import week5Video from '../video/Cracking_the_Code.mp4';
-import week6Video from '../video/Your_Career_Toolkit.mp4';
-import week7Video from '../video/Ace_Your_Tech_Interview.mp4';
-import week10Video from '../video/The_Unwritten_Rules.mp4';
-import week11Video from '../video/Job_Search_Resilience.mp4';
-import week12Video from '../video/A_Practical_Philosophy_of_Money.mp4';
-import week1Audio from '../audio/Audio Lecture.m4a';
-import week2Audio from '../audio/Engineer_Your_Resume_for_Robots_and_Recruiters.m4a';
-import week3Audio from '../audio/Stop_Job_Hunting_and_Get_Hunted.m4a';
-import week4Audio from '../audio/The_Post-Bootcamp_Job_Search_Operating_System.m4a';
-import week5Audio from '../audio/Beat_the_ATS_and_land_tech_interviews.m4a';
-import week6Audio from '../audio/Why_Brilliant_Tech_Workers_Get_Fired.m4a';
-import week7Audio from '../audio/Behavioral_interview_tactics_for_cybersecurity_career_changers.m4a';
-import week10Audio from '../audio/What_managers_actually_want_from_you.m4a';
-import week11Audio from '../audio/Beating_the_2026_AI_hiring_trap.m4a';
-import week12Audio from '../audio/Don_t_go_broke_with_your_first_paycheck.m4a';
 import {
   WORKSHOP_TITLES,
   WORKSHOP_FOCUS,
   getAssignmentOptions,
-  SECTION_VIDEO,
-  SECTION_VIDEO_LABEL,
   SECTION_AUDIO,
   SECTION_ASSIGNMENT_FILES,
 } from './sectionData';
 import { getMediaUrl, getStaticMediaUrl } from '../api';
 import './SectionPage.css';
 
-/** Bundled in the app (src/video); keys are section ids. */
-const SECTION_BUNDLED_VIDEOS = {
-  1: week1Video,
-  2: week2Video,
-  3: week3Video,
-  4: week4Video,
-  5: week5Video,
-  6: week6Video,
-  7: week7Video,
-  10: week10Video,
-  11: week11Video,
-  12: week12Video,
-};
-
-/** Bundled in the app (src/audio); keys are section ids. */
-const SECTION_BUNDLED_AUDIOS = {
-  1: week1Audio,
-  2: week2Audio,
-  3: week3Audio,
-  4: week4Audio,
-  5: week5Audio,
-  6: week6Audio,
-  7: week7Audio,
-  10: week10Audio,
-  11: week11Audio,
-  12: week12Audio,
+/** Audio files live under src/WeekN/audio/ (one folder per week). */
+const SECTION_BUNDLED_AUDIO_IMPORTS = {
+  1: () => import('../Week1/audio/Audio Lecture.m4a'),
+  2: () => import('../Week2/audio/Engineer_Your_Resume_for_Robots_and_Recruiters.m4a'),
+  3: () => import('../Week3/audio/Stop_Job_Hunting_and_Get_Hunted.m4a'),
+  4: () => import('../Week4/audio/The_Post-Bootcamp_Job_Search_Operating_System.m4a'),
+  5: () => import('../Week5/audio/Beat_the_ATS_and_land_tech_interviews.m4a'),
+  6: () => import('../Week6/audio/Why_Brilliant_Tech_Workers_Get_Fired.m4a'),
+  7: () => import('../Week7/audio/Behavioral_interview_tactics_for_cybersecurity_career_changers.m4a'),
+  10: () => import('../Week10/audio/What_managers_actually_want_from_you.m4a'),
+  11: () => import('../Week11/audio/Beating_the_2026_AI_hiring_trap.m4a'),
+  12: () => import('../Week12/audio/Don_t_go_broke_with_your_first_paycheck.m4a'),
 };
 
 function KableLogo() {
@@ -76,50 +40,58 @@ export default function SectionPage() {
   const { sectionId } = useParams();
   const id = sectionId ? parseInt(sectionId, 10) : 1;
   const title = WORKSHOP_TITLES[id - 1] || WORKSHOP_TITLES[0];
-  const isSection1 = id === 1;
 
   const focusPoints = WORKSHOP_FOCUS[id - 1] || [];
-  const videoFilename = SECTION_VIDEO[id];
-  const videoLabel = SECTION_VIDEO_LABEL[id];
   const audioFilename = SECTION_AUDIO[id];
   const assignmentFiles = SECTION_ASSIGNMENT_FILES[id] || [];
   const assignmentOptions = getAssignmentOptions(id);
-  const [videoError, setVideoError] = useState(false);
   const [audioError, setAudioError] = useState(false);
-  const [videoUseStaticFallback, setVideoUseStaticFallback] = useState(false);
-  /** When true, skip bundled video for this section and use API / static URLs. */
-  const [videoSkipBundled, setVideoSkipBundled] = useState(false);
   const [audioUseStaticFallback, setAudioUseStaticFallback] = useState(false);
-  /** When true, skip bundled audio for this section and use API / static URLs. */
   const [audioSkipBundled, setAudioSkipBundled] = useState(false);
+  const [bundledAudioUrl, setBundledAudioUrl] = useState(null);
+  const [audioBundleFailed, setAudioBundleFailed] = useState(false);
+
+  const tryAudioBundle = !!(audioFilename && SECTION_BUNDLED_AUDIO_IMPORTS[id]);
+  const audioBundleLoading =
+    tryAudioBundle && bundledAudioUrl === null && !audioBundleFailed && !audioSkipBundled;
 
   useEffect(() => {
-    setVideoError(false);
-    setVideoUseStaticFallback(false);
-    setVideoSkipBundled(false);
     setAudioError(false);
     setAudioUseStaticFallback(false);
     setAudioSkipBundled(false);
+    setBundledAudioUrl(null);
+    setAudioBundleFailed(false);
   }, [id]);
 
-  const bundledVideoUrl = SECTION_BUNDLED_VIDEOS[id];
-  const videoSrc = videoFilename
-    ? bundledVideoUrl && !videoSkipBundled
-      ? bundledVideoUrl
-      : videoUseStaticFallback
-        ? getStaticMediaUrl(id, 'video', videoFilename)
-        : getMediaUrl(id, 'video', videoFilename)
-    : null;
-  const bundledAudioUrl = SECTION_BUNDLED_AUDIOS[id];
+  useEffect(() => {
+    let cancelled = false;
+    if (!audioFilename || !SECTION_BUNDLED_AUDIO_IMPORTS[id]) return undefined;
+    SECTION_BUNDLED_AUDIO_IMPORTS[id]()
+      .then((m) => {
+        if (!cancelled) setBundledAudioUrl(m.default);
+      })
+      .catch(() => {
+        if (!cancelled) setAudioBundleFailed(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [id, audioFilename]);
+
   const audioSrc = audioFilename
-    ? bundledAudioUrl && !audioSkipBundled
-      ? bundledAudioUrl
-      : audioUseStaticFallback
-        ? getStaticMediaUrl(id, 'audio', audioFilename)
-        : getMediaUrl(id, 'audio', audioFilename)
+    ? audioBundleLoading
+      ? null
+      : bundledAudioUrl && !audioSkipBundled
+        ? bundledAudioUrl
+        : audioUseStaticFallback
+          ? getStaticMediaUrl(id, 'audio', audioFilename)
+          : getMediaUrl(id, 'audio', audioFilename)
     : null;
 
   const { user, logout } = useAuth();
+
+  const audioLinkHref =
+    audioFilename && (audioSrc || getMediaUrl(id, 'audio', audioFilename));
 
   return (
     <div className="section-page">
@@ -139,8 +111,7 @@ export default function SectionPage() {
         <h1 className="section-title">{title}</h1>
         <hr className="section-title-rule" />
 
-        {/* Block 1: Objectives + Video */}
-        <section className="section-block block-objectives-video">
+        <section className="section-block block-objectives-only">
           <div className="block-objectives">
             <h2 className="block-heading">Focus</h2>
             <ol className="objectives-list">
@@ -149,52 +120,15 @@ export default function SectionPage() {
               ))}
             </ol>
           </div>
-          <div className="block-video">
-            {videoFilename ? (
-              <div className="video-player">
-                {!videoError ? (
-                  <video
-                    src={videoSrc}
-                    controls
-                    preload="metadata"
-                    className="section-main-video"
-                    aria-label={videoLabel || 'Week video'}
-                    onError={() => {
-                      if (bundledVideoUrl && !videoSkipBundled) {
-                        setVideoSkipBundled(true);
-                      } else if (!videoUseStaticFallback) {
-                        setVideoUseStaticFallback(true);
-                      } else {
-                        setVideoError(true);
-                      }
-                    }}
-                  >
-                    Your browser does not support the video tag.
-                  </video>
-                ) : null}
-                {videoError ? (
-                  <div className="video-placeholder">
-                    <p className="video-placeholder-text">Video couldn&apos;t load in the player.</p>
-                    <a href={videoSrc} target="_blank" rel="noopener noreferrer" className="btn-video">Open video in new tab</a>
-                  </div>
-                ) : null}
-              </div>
-            ) : (
-              <div className="video-player video-placeholder">
-                <p className="video-placeholder-text">No video for this week.</p>
-              </div>
-            )}
-          </div>
         </section>
 
-        {/* Block 2: Quiz + Audio */}
         <section className="section-block block-quiz-audio">
           <div className="block-quiz-panel">
             <div className="block-icon quiz-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><path d="M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9l2 2 4-4"/></svg>
             </div>
             <h2 className="block-heading white">Quiz</h2>
-            {(isSection1 || id === 2 || id === 3 || id === 8 || id === 9 || id === 10 || id === 11 || id === 12) ? (
+            {(id === 1 || id === 2 || id === 3 || id === 8 || id === 9 || id === 10 || id === 11 || id === 12) ? (
               <Link to={`/section/${id}/quiz`} className="btn-quiz-inline">Take Section {id} Quiz</Link>
             ) : (
               <p className="block-quiz-coming">Quiz coming soon</p>
@@ -208,11 +142,16 @@ export default function SectionPage() {
             {audioFilename ? (
               <>
                 {!audioError ? (
+                  audioBundleLoading ? (
+                    <div className="media-loading-placeholder section-audio-element" role="status">
+                      Loading audio…
+                    </div>
+                  ) : audioSrc ? (
                   <div className="audio-player">
                     <audio
                       src={audioSrc}
                       controls
-                      preload="metadata"
+                      preload="none"
                       className="section-audio-element"
                       aria-label="Audio lesson"
                       onError={() => {
@@ -228,16 +167,17 @@ export default function SectionPage() {
                       Your browser does not support the audio element.
                     </audio>
                   </div>
+                  ) : null
                 ) : (
                   <div className="audio-fallback">
                     <p className="audio-placeholder-text">Audio couldn&apos;t load in the player.</p>
-                    <a href={audioSrc} target="_blank" rel="noopener noreferrer" className="audio-links">Open audio in new tab</a>
-                    <a href={audioSrc} download className="audio-links">Download audio</a>
+                    <a href={audioLinkHref || '#'} target="_blank" rel="noopener noreferrer" className="audio-links">Open audio in new tab</a>
+                    <a href={audioLinkHref || '#'} download className="audio-links">Download audio</a>
                   </div>
                 )}
-                {!audioError && (
+                {!audioError && audioLinkHref && !audioBundleLoading && (
                   <div className="audio-links">
-                    <a href={audioSrc} download>Download audio</a>
+                    <a href={audioLinkHref} download>Download audio</a>
                   </div>
                 )}
               </>
@@ -247,32 +187,6 @@ export default function SectionPage() {
           </div>
         </section>
 
-        {/* Block 3: Videos list */}
-        {videoFilename && (
-          <section className="section-block block-videos">
-            <div className="block-videos-sidebar">
-              <div className="block-icon videos-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/></svg>
-              </div>
-              <h2 className="block-heading white">Videos</h2>
-            </div>
-            <div className="block-videos-content">
-              <p className="block-prompt">Watch this week&apos;s video:</p>
-              <div className="video-buttons">
-                <a
-                  href={videoSrc}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-video"
-                >
-                  {videoLabel || videoFilename}
-                </a>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* Block 4: Assignments (one section: online assignments + course materials) */}
         <section className="section-block block-assignments">
           <div className="block-assignments-sidebar">
             <div className="block-icon assignments-icon" aria-hidden="true">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getReleasedSections } from '../api';
@@ -31,15 +31,13 @@ const TILE_STYLES = [
   { bgType: 'solid', bgColor: '#172649' },
 ];
 
-function buildAllTiles() {
-  return WORKSHOP_TITLES.map((title, i) => ({
-    title,
-    ...TILE_STYLES[i],
-    to: `/section/${i + 1}`,
-  }));
-}
+const ALL_SECTION_TILES = WORKSHOP_TITLES.map((title, i) => ({
+  title,
+  ...TILE_STYLES[i],
+  to: `/section/${i + 1}`,
+}));
 
-function LifeSkillsTile({ title, bgType, bgImage, bgColor, to }) {
+const LifeSkillsTile = memo(function LifeSkillsTile({ title, bgType, bgImage, bgColor, to }) {
   const style =
     bgType === 'image'
       ? { backgroundImage: `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url(${bgImage})` }
@@ -58,7 +56,7 @@ function LifeSkillsTile({ title, bgType, bgImage, bgColor, to }) {
       {content}
     </div>
   );
-}
+});
 
 export default function LifeSkillsPage() {
   const { user, logout } = useAuth();
@@ -81,11 +79,11 @@ export default function LifeSkillsPage() {
     return () => { cancelled = true; };
   }, [user?.email]);
 
-  const allTiles = buildAllTiles();
   const hasReleasedSections = Array.isArray(releasedSectionIds) && releasedSectionIds.length > 0;
-  const tiles = hasReleasedSections
-    ? allTiles.filter((_, i) => releasedSectionIds.includes(i + 1))
-    : [];
+  const tiles = useMemo(() => {
+    if (!Array.isArray(releasedSectionIds) || releasedSectionIds.length === 0) return [];
+    return ALL_SECTION_TILES.filter((_, i) => releasedSectionIds.includes(i + 1));
+  }, [releasedSectionIds]);
   const isLoading = releasedSectionIds === null && user?.email;
   const noAccess = Array.isArray(releasedSectionIds) && releasedSectionIds.length === 0;
 
