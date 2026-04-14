@@ -565,3 +565,208 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Reference-inspired week layout refresh */
+.section-page {
+  background:
+    radial-gradient(120% 180% at -5% 100%, #b3d4ff 0%, rgba(179, 212, 255, 0) 45%),
+    radial-gradient(90% 140% at 110% -10%, #9cc4ff 0%, rgba(156, 196, 255, 0) 45%),
+    linear-gradient(180deg, #1a4f96 0%, #2f6fbe 12%, #d9ecff 45%, #d2e8ff 100%);
+}
+
+.section-main {
+  max-width: 1180px;
+  padding: 1.4rem 1.25rem 2rem;
+}
+
+.section-title {
+  color: #ffffff;
+  text-transform: none;
+  font-size: clamp(1.35rem, 2vw, 2rem);
+  letter-spacing: 0;
+  font-weight: 800;
+}
+
+.section-title-rule {
+  border-top: 2px solid rgba(255, 255, 255, 0.8);
+  margin-bottom: 1rem;
+}
+
+.section-top-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 1fr) minmax(320px, 1.55fr);
+  gap: 0.9rem;
+  margin-bottom: 0.9rem;
+}
+
+.section-right-stack {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 0.9rem;
+}
+
+.panel-card {
+  background: #f9fdff;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 14px;
+  box-shadow: 0 10px 26px rgba(16, 54, 110, 0.2);
+  overflow: hidden;
+}
+
+.panel-heading {
+  margin: 0;
+  padding: 0.65rem 1rem;
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 800;
+  background: linear-gradient(180deg, #2f79ce 0%, #2869b4 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.panel-focus {
+  padding-bottom: 0.85rem;
+}
+
+.objectives-list {
+  margin: 0.7rem 0 0;
+  padding: 0 1rem 0 2.2rem;
+  color: #12294d;
+  font-size: 1rem;
+  line-height: 1.48;
+}
+
+.objectives-list li {
+  margin: 0.42rem 0;
+}
+
+.panel-quiz,
+.panel-audio {
+  padding-bottom: 0.9rem;
+}
+
+.panel-quiz .btn-quiz-inline {
+  margin: 0.85rem auto 0;
+  display: block;
+  width: fit-content;
+  min-width: 220px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #49b389 0%, #328e70 100%);
+  color: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 5px 10px rgba(13, 69, 48, 0.25);
+}
+
+.panel-quiz .btn-quiz-inline:hover {
+  background: linear-gradient(180deg, #56c095 0%, #3a9f7e 100%);
+  color: #ffffff;
+}
+
+.block-quiz-coming {
+  color: #1b3965;
+  text-align: center;
+}
+
+.audio-player {
+  margin: 0.7rem 1rem 0;
+}
+
+.section-audio-element {
+  width: 100%;
+}
+
+.audio-placeholder-text {
+  color: #1b3965;
+  margin: 0.85rem 1rem 0;
+}
+
+.audio-links {
+  margin: 0.65rem 1rem 0;
+  justify-content: center;
+}
+
+.audio-links a {
+  color: #275c9f;
+  font-weight: 600;
+}
+
+.media-loading-placeholder {
+  margin: 0.85rem 1rem 0;
+  min-height: 56px;
+  border-radius: 10px;
+  background: #eef5ff;
+  color: #3b5f8d;
+}
+
+.block-assignments {
+  background: #f9fdff;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 26px rgba(16, 54, 110, 0.2);
+  grid-template-columns: 190px 1fr;
+}
+
+.block-assignments-sidebar {
+  background: linear-gradient(180deg, #6cc48f 0%, #59ab7a 100%);
+}
+
+.block-assignments-content {
+  background: transparent;
+  padding: 0.9rem 1rem 1rem;
+}
+
+.block-prompt {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #2d4264;
+  margin-bottom: 0.8rem;
+}
+
+.assignment-buttons {
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 0.65rem;
+}
+
+.btn-assignment {
+  background: #eef5ef;
+  border: 1px solid #d7e7da;
+  border-radius: 8px;
+  color: #24364e;
+  font-size: 1.15rem;
+  font-weight: 600;
+  padding: 0.6rem 0.85rem;
+  text-align: left;
+}
+
+.btn-assignment:hover {
+  background: #e3efe5;
+}
+
+@media (max-width: 920px) {
+  .section-top-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-right-stack {
+    grid-template-rows: auto;
+  }
+
+  .block-assignments {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .panel-quiz .btn-quiz-inline {
+    min-width: 0;
+    width: calc(100% - 2rem);
+  }
+
+  .block-prompt {
+    font-size: 1.2rem;
+  }
+
+  .assignment-buttons {
+    grid-template-columns: 1fr;
+  }
+}

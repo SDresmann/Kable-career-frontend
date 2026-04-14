@@ -1,6 +1,22 @@
-# Getting Started with Create React App
+# Kable Career (frontend)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Deploying on Render (fix 404 on /login, /section/1, etc.)
+
+This app uses React Router. So that direct URLs like `/login` or `/section/1` work (and don’t return 404), add a **rewrite rule** in the Render Dashboard:
+
+1. Open your **Static Site** (e.g. kable-career) on [Render Dashboard](https://dashboard.render.com/).
+2. Go to the **Redirects / Rewrites** tab.
+3. Add a rule:
+   - **Source Path:** `/*`
+   - **Destination Path:** `/index.html`
+   - **Action:** **Rewrite**
+4. Save. Redeploy if needed.
+
+After this, every path (e.g. `kable-career.onrender.com/login`) will serve `index.html`, and React Router will show the correct page.
+
+**Video and audio on week pages:** The app loads video/audio from the **Kable Career backend** (`/api/media/week/...`). The backend looks in `backend/media/WeekN/` then `public/WeekN/`. **For production:** copy `public/Week1`–`public/Week12` into `backend/media/` and deploy the backend with that folder. Media files live in `public/Week1`–`public/Week12` (each with `video/` and `audio/` folders). Render serves static files first, so `/Week1/video/…` and `/Week1/audio/…` will work **only if** those folders and files are in your repo and included in the build. Ensure `public/Week1` through `public/Week12` (and their contents) are committed. If the player shows “couldn’t load”, use the “Open in new tab” / “Download” links; if those also fail, the media files are not in the deployed build.
 
 ## Available Scripts
 

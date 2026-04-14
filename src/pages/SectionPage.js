@@ -111,79 +111,76 @@ export default function SectionPage() {
         <h1 className="section-title">{title}</h1>
         <hr className="section-title-rule" />
 
-        <section className="section-block block-objectives-only">
-          <div className="block-objectives">
-            <h2 className="block-heading">Focus</h2>
+        <section className="section-top-grid">
+          <div className="panel-card panel-focus">
+            <h2 className="panel-heading">Today&apos;s Focus</h2>
             <ol className="objectives-list">
               {focusPoints.map((item, i) => (
                 <li key={i}>{item}</li>
               ))}
             </ol>
           </div>
-        </section>
 
-        <section className="section-block block-quiz-audio">
-          <div className="block-quiz-panel">
-            <div className="block-icon quiz-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><path d="M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9l2 2 4-4"/></svg>
+          <div className="section-right-stack">
+            <div className="panel-card panel-quiz">
+              <h2 className="panel-heading">Quiz</h2>
+              {(id === 1 || id === 2 || id === 3 || id === 8 || id === 9 || id === 10 || id === 11 || id === 12) ? (
+                <Link to={`/section/${id}/quiz`} className="btn-quiz-inline">Take Section {id} Quiz</Link>
+              ) : (
+                <p className="block-quiz-coming">Quiz coming soon</p>
+              )}
             </div>
-            <h2 className="block-heading white">Quiz</h2>
-            {(id === 1 || id === 2 || id === 3 || id === 8 || id === 9 || id === 10 || id === 11 || id === 12) ? (
-              <Link to={`/section/${id}/quiz`} className="btn-quiz-inline">Take Section {id} Quiz</Link>
-            ) : (
-              <p className="block-quiz-coming">Quiz coming soon</p>
-            )}
-          </div>
-          <div className="block-audio">
-            <div className="block-icon audio-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-            </div>
-            <h2 className="block-heading white">Audio Lesson</h2>
-            {audioFilename ? (
-              <>
-                {!audioError ? (
-                  audioBundleLoading ? (
-                    <div className="media-loading-placeholder section-audio-element" role="status">
-                      Loading audio…
+
+            <div className="panel-card panel-audio">
+              <h2 className="panel-heading">Audio Lesson</h2>
+              {audioFilename ? (
+                <>
+                  {!audioError ? (
+                    audioBundleLoading ? (
+                      <div className="media-loading-placeholder section-audio-element" role="status">
+                        Loading audio…
+                      </div>
+                    ) : audioSrc ? (
+                      <div className="audio-player">
+                        <audio
+                          src={audioSrc}
+                          controls
+                          preload="none"
+                          className="section-audio-element"
+                          aria-label="Audio lesson"
+                          onError={() => {
+                            if (bundledAudioUrl && !audioSkipBundled) {
+                              setAudioSkipBundled(true);
+                            } else if (!audioUseStaticFallback) {
+                              setAudioUseStaticFallback(true);
+                            } else {
+                              setAudioError(true);
+                            }
+                          }}
+                        >
+                          Your browser does not support the audio element.
+                        </audio>
+                      </div>
+                    ) : null
+                  ) : (
+                    <div className="audio-fallback">
+                      <p className="audio-placeholder-text">Audio couldn&apos;t load in the player.</p>
+                      <div className="audio-links">
+                        <a href={audioLinkHref || '#'} target="_blank" rel="noopener noreferrer">Open audio in new tab</a>
+                        <a href={audioLinkHref || '#'} download>Download audio</a>
+                      </div>
                     </div>
-                  ) : audioSrc ? (
-                  <div className="audio-player">
-                    <audio
-                      src={audioSrc}
-                      controls
-                      preload="none"
-                      className="section-audio-element"
-                      aria-label="Audio lesson"
-                      onError={() => {
-                        if (bundledAudioUrl && !audioSkipBundled) {
-                          setAudioSkipBundled(true);
-                        } else if (!audioUseStaticFallback) {
-                          setAudioUseStaticFallback(true);
-                        } else {
-                          setAudioError(true);
-                        }
-                      }}
-                    >
-                      Your browser does not support the audio element.
-                    </audio>
-                  </div>
-                  ) : null
-                ) : (
-                  <div className="audio-fallback">
-                    <p className="audio-placeholder-text">Audio couldn&apos;t load in the player.</p>
-                    <a href={audioLinkHref || '#'} target="_blank" rel="noopener noreferrer" className="audio-links">Open audio in new tab</a>
-                    <a href={audioLinkHref || '#'} download className="audio-links">Download audio</a>
-                  </div>
-                )}
-                {!audioError && audioLinkHref && !audioBundleLoading && (
-                  <div className="audio-links">
-                    <a href={audioLinkHref} download>Download audio</a>
-                  </div>
-                )}
-              </>
-            ) : (
-              <p className="audio-placeholder-text">No audio for this week.</p>
-            )}
+                  )}
+                  {!audioError && audioLinkHref && !audioBundleLoading && (
+                    <div className="audio-links">
+                      <a href={audioLinkHref} download>Download audio</a>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <p className="audio-placeholder-text">No audio for this week.</p>
+              )}
+            </div>
           </div>
         </section>
 
