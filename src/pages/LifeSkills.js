@@ -16,42 +16,24 @@ function KableLogo() {
   );
 }
 
-const TILE_STYLES = [
-  { bgImage: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80' },
-  { bgImage: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&q=80' },
-  { bgImage: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=1200&q=80' },
-  { bgImage: 'https://images.unsplash.com/photo-1454165804606-c3d57bc2f866?w=1200&q=80' },
-  { bgImage: 'https://images.unsplash.com/photo-1501139083538-0139583c060f?w=1200&q=80' },
-  { bgImage: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200&q=80' },
-  { bgImage: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1200&q=80' },
-  { bgImage: 'https://images.unsplash.com/photo-1522204523234-8729aa6e3d7f?w=1200&q=80' },
-  { bgImage: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80' },
-  { bgImage: 'https://images.unsplash.com/photo-1529070538774-1843cb3265df?w=1200&q=80' },
-  { bgImage: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1200&q=80' },
-  { bgImage: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80' },
-];
-
 const ALL_SECTION_TILES = WORKSHOP_TITLES.map((title, i) => ({
   title,
-  ...TILE_STYLES[i],
+  tone: i % 2 === 0 ? 'tile-tone-blue' : 'tile-tone-green',
   to: `/section/${i + 1}`,
 }));
 
-const LifeSkillsTile = memo(function LifeSkillsTile({ title, bgImage, to }) {
-  const style = {
-    backgroundImage: `linear-gradient(180deg, rgba(9, 22, 40, 0.25) 0%, rgba(9, 22, 40, 0.6) 100%), url(${bgImage})`,
-  };
-  const className = 'life-skill-tile tile-with-image';
+const LifeSkillsTile = memo(function LifeSkillsTile({ title, tone, to }) {
+  const className = `life-skill-tile ${tone}`;
   const content = <span className="tile-title">{title}</span>;
   if (to) {
     return (
-      <Link to={to} className={className} style={style}>
+      <Link to={to} className={className}>
         {content}
       </Link>
     );
   }
   return (
-    <div className={className} style={style}>
+    <div className={className}>
       {content}
     </div>
   );

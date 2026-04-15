@@ -140,22 +140,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-size: cover;
-  background-position: center;
-  background-color: #6b7280;
+  background-size: 100% 100%;
+  background-color: #2659a8;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.72);
   box-shadow: 0 10px 26px rgba(16, 54, 110, 0.2);
 }
 
-.life-skill-tile.tile-with-image {
-  filter: saturate(0.9);
+.life-skill-tile.tile-tone-blue {
+  background-image: linear-gradient(135deg, #1d5db8 0%, #2f73cd 50%, #4594e5 100%);
 }
 
-.life-skill-tile.tile-with-image:hover {
-  filter: saturate(1);
+.life-skill-tile.tile-tone-green {
+  background-image: linear-gradient(135deg, #159170 0%, #1da27d 50%, #35b98f 100%);
 }
 
 .life-skill-tile:hover {
