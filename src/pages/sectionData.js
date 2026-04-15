@@ -151,21 +151,70 @@ export const SECTION_AUDIO = {
   12: 'Don_t_go_broke_with_your_first_paycheck.m4a',
 };
 
-/** Assignment materials (docx, etc.). Files live under src/WeekN/assignments/ (see weekAssignmentAssets.js).
- *  Presentations (.pptx), infographics (.png), and blog/newsletter/article-style handouts are omitted from the list. */
+/** Assignment materials (docx). Files live under src/WeekN/assignments/ (bundled via weekAssignmentAssets.js). */
 export const SECTION_ASSIGNMENT_FILES = {
-  1: [],
-  2: [],
-  3: [],
-  4: [],
-  5: [],
-  6: [{ label: 'Professionalism Playbook', file: 'professionalism_playbook.docx' }],
-  7: [],
-  8: [{ label: 'Hiring System Guide', file: 'hiring_system_guide.docx' }],
-  9: [],
-  10: [],
-  11: [],
-  12: [],
+  1: [
+    { label: 'The Master E-Book', file: 'the_master_ebook.docx' },
+    { label: 'Intake assignment (Week 1)', file: 'intake_assignment_week_1.docx' },
+  ],
+  2: [
+    { label: 'The Master E-Book', file: 'the_master_ebook.docx' },
+    { label: 'Week 2 intake assignment', file: 'week_2_intake_assignment.docx' },
+  ],
+  3: [
+    { label: 'The Master E-Book', file: 'the_master_ebook.docx' },
+    { label: 'Week 3 assignment', file: 'week_3_assignment.docx' },
+    { label: 'Week 3 intake assignment', file: 'week_3_intake_assignment.docx' },
+    { label: 'LinkedIn setup assignment', file: 'week_3_linkedin_setup_assignment.docx' },
+    { label: 'Week 3 quiz', file: 'week_3_quiz.docx' },
+  ],
+  4: [
+    { label: 'The Master E-Book', file: 'the_master_ebook.docx' },
+    { label: 'Chapter 4 quiz', file: 'chapter_4_quiz.docx' },
+    { label: 'Chapter 4 reflection', file: 'chapter_4_reflection.docx' },
+    { label: 'Week 4 intake assignment', file: 'week_4_intake_assignment.docx' },
+    { label: 'The job tracker', file: 'week_4_job_tracker.docx' },
+  ],
+  5: [
+    { label: 'The Master E-Book', file: 'the_master_ebook.docx' },
+    { label: 'Chapter 5 quiz', file: 'chapter_5_quiz.docx' },
+    { label: 'Resume version 2', file: 'week_5_resume_version_2.docx' },
+    { label: 'The soft skills interview', file: 'week_5_soft_skills_interview.docx' },
+  ],
+  6: [
+    { label: 'The Master E-Book', file: 'the_master_ebook.docx' },
+    { label: 'Week 6 assignment', file: 'week_6_assignment.docx' },
+    { label: 'Week 6 quiz', file: 'week_6_quiz.docx' },
+    { label: 'Reverse engineering', file: 'week_6_reverse_engineering.docx' },
+  ],
+  7: [
+    { label: 'The Master E-Book', file: 'the_master_ebook.docx' },
+    { label: 'Week 7 assignment', file: 'week_7_assignment.docx' },
+    { label: 'Interview performance', file: 'week_7_interview_performance.docx' },
+  ],
+  8: [
+    { label: 'The Master E-Book', file: 'the_master_ebook.docx' },
+    { label: 'Week 8 assignments', file: 'week_8_assignments.docx' },
+    { label: 'Professionalism', file: 'week_8_professionalism.docx' },
+  ],
+  9: [
+    { label: 'The Master E-Book', file: 'the_master_ebook.docx' },
+    { label: 'Consistency', file: 'week_9_consistency.docx' },
+  ],
+  10: [
+    { label: 'The Master E-Book', file: 'the_master_ebook.docx' },
+    { label: 'Week 10 assignment', file: 'week_10_assignment.docx' },
+    { label: 'Opportunities', file: 'week_10_opportunities.docx' },
+  ],
+  11: [
+    { label: 'The Master E-Book', file: 'the_master_ebook.docx' },
+    { label: 'Week 11 assignment', file: 'week_11_assignment.docx' },
+    { label: 'Operating like you already have the job', file: 'week_11_operating_like_you_have_the_job.docx' },
+  ],
+  12: [
+    { label: 'The Master E-Book', file: 'the_master_ebook.docx' },
+    { label: 'Staying in the game', file: 'week_12_staying_in_the_game.docx' },
+  ],
 };
 
 /** Returns full assignment list for a section (Read chapter N first, then section-specific or placeholders) */

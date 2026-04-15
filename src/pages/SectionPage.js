@@ -11,18 +11,18 @@ import {
 import { getMediaUrl, getStaticMediaUrl } from '../api';
 import './SectionPage.css';
 
-/** Audio files live under src/WeekN/audio/ (one folder per week). */
+/** Audio files live under src/audio/ (bundled per section filename in SECTION_AUDIO). */
 const SECTION_BUNDLED_AUDIO_IMPORTS = {
-  1: () => import('../Week1/audio/Audio Lecture.m4a'),
-  2: () => import('../Week2/audio/Engineer_Your_Resume_for_Robots_and_Recruiters.m4a'),
-  3: () => import('../Week3/audio/Stop_Job_Hunting_and_Get_Hunted.m4a'),
-  4: () => import('../Week4/audio/The_Post-Bootcamp_Job_Search_Operating_System.m4a'),
-  5: () => import('../Week5/audio/Beat_the_ATS_and_land_tech_interviews.m4a'),
-  6: () => import('../Week6/audio/Why_Brilliant_Tech_Workers_Get_Fired.m4a'),
-  7: () => import('../Week7/audio/Behavioral_interview_tactics_for_cybersecurity_career_changers.m4a'),
-  10: () => import('../Week10/audio/What_managers_actually_want_from_you.m4a'),
-  11: () => import('../Week11/audio/Beating_the_2026_AI_hiring_trap.m4a'),
-  12: () => import('../Week12/audio/Don_t_go_broke_with_your_first_paycheck.m4a'),
+  1: () => import('../audio/Audio Lecture.m4a'),
+  2: () => import('../audio/Engineer_Your_Resume_for_Robots_and_Recruiters.m4a'),
+  3: () => import('../audio/Stop_Job_Hunting_and_Get_Hunted.m4a'),
+  4: () => import('../audio/The_Post-Bootcamp_Job_Search_Operating_System.m4a'),
+  5: () => import('../audio/Beat_the_ATS_and_land_tech_interviews.m4a'),
+  6: () => import('../audio/Why_Brilliant_Tech_Workers_Get_Fired.m4a'),
+  7: () => import('../audio/Behavioral_interview_tactics_for_cybersecurity_career_changers.m4a'),
+  10: () => import('../audio/What_managers_actually_want_from_you.m4a'),
+  11: () => import('../audio/Beating_the_2026_AI_hiring_trap.m4a'),
+  12: () => import('../audio/Don_t_go_broke_with_your_first_paycheck.m4a'),
 };
 
 function KableLogo() {
