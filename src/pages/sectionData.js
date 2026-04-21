@@ -15,18 +15,18 @@ export const SECTION_TITLES = {
 
 /** Workshop titles shown on home page tiles. Weeks 10–12 show chapters 7–9. */
 export const WORKSHOP_TITLES = [
-  "Introduction to Resume & What to Expect in CS",
-  'How Hiring Actually Works: ATS & AI',
-  'Building an Online Presence the Right Way (LinkedIn + Indeed)',
-  'First Career Report + Job Search System',
-  'Knowing When to Apply: Tailoring the Resume',
-  'Reverse Engineering the Role (Using AI)',
-  "Professionalism in 2026: What Employers Are Reacting To",
-  "Networking Without Feeling Gross (and Why It's Not Magic)",
-  'Career Hygiene: Staying Employed, Sane, and Ready for What\'s Next',
-  "Interviews Aren't Tests: Behavioral Questions Demystified",
-  'Proof Over Promises: Portfolios, Projects, and Showing Your Work',
-  'Behind the Curtain: How Recruiting Decisions Actually Get Made',
+  "Introduction to CS",
+  'How Hiring Actually Works',
+  'Building an Online Presence',
+  'First Career Report',
+  'Knowing When to Apply',
+  'Reverse Engineering the Role',
+  "What Employers Are Reacting To",
+  "Networking Without Feeling Gross",
+  'Career Hygiene',
+  "Interviews Aren't Tests",
+  'Proof Over Promises',
+  'How Recruiting Decisions Actually Get Made',
 ];
 
 /** Focus points per section (1–12). Weeks 10–12 show chapters 7–9 focus. */
