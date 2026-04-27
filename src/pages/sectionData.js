@@ -18,15 +18,15 @@ export const WORKSHOP_TITLES = [
   "Introduction to CS",
   'How Hiring Actually Works',
   'Building an Online Presence',
-  'First Career Report',
-  'Knowing When to Apply',
+  'Being Findable Online',
   'Reverse Engineering the Role',
-  "What Employers Are Reacting To",
-  "Networking Without Feeling Gross",
-  'Career Hygiene',
-  "Interviews Aren't Tests",
-  'Proof Over Promises',
-  'How Recruiting Decisions Actually Get Made',
+  'Professional Presence',
+  "Performing in the Interview",
+  "Networking Without Desperation",
+  'The Job Search as a System',
+  "The First 90 Days",
+  'Resilience and the Long Game',
+  'Financial Stability and Independence',
 ];
 
 /** Focus points per section (1–12). Weeks 10–12 show chapters 7–9 focus. */
